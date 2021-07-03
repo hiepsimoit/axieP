@@ -4,15 +4,18 @@
 @section('content')
 
 <br>
-<form id="formCV" class="form-inline" enctype="multipart/form-data" action="earn" method="post">
+<form id="formCV" class="form-inline" enctype="multipart/form-data" action="{{$link}}" method="get">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <div class="row">
 		<div class="col-md-2">Chọn tháng:</div>
 		<div class="col-md-2">
-			<input type="text" id="choose_month" name="choose_month" class="form-control dtMonthPicker" value="{{date('m/Y')}}">
+			<input type="text" id="choose_month" name="choose_month" class="form-control dtMonthPicker" value="@if($choose_month) {{$choose_month}} @else {{date('m/Y')}}@endif">
 		</div>
-		
+		<div class="col-md-2">
+			<button type="submit" class="btn btn-success" id="button_search" name="button_search">Search</button>
+		</div>
 	</div>
+	
 </form>
 
 <table class="table select_table my-table table-bordered">

@@ -13,19 +13,26 @@ use DateTime;
 use DB;
 use App\balance_eod;
 use App\investor;
+use App\accounts;
+
 
 
 class earnedController extends Controller
 {
     public function getSLPearnedPerDay(Request $request){
+        // echo $request->choose_month.'<br>'; 
+        // echo date('m/Y');
+        // die;
+        // echo $request->link;die;
         if($request->choose_month)
-            $monthFull = substr($request->choose_month, 3,4).substr($request->choose_month, 0,2);
+            $monthFull = substr($request->choose_month, 3, 4).substr($request->choose_month, 0, 2);
         else
             $monthFull = date('Ym');
-        // echo $request->link;die;
+
+        // echo $monthFull;die;
         set_time_limit(0);
 
-        $month = intval(substr($request->choose_month, 0, 2));
+        $month = intval(substr($monthFull, 4, 6));
         $today = intval(date('d'));
         if(
             $month == 1 ||
@@ -48,7 +55,7 @@ class earnedController extends Controller
             $investor_id = $investor->id; 
         else
             $investor_id = 1;
-        $accounts = DB::table('accounts')->where('investor_id', $investor_id)->get();
+        $accounts = accounts::where('investor_id', $investor_id)->get();
 
         $table = [];
         $sum = [];
@@ -59,7 +66,7 @@ class earnedController extends Controller
         }
         for($i = 0; $i < $numberDay; $i++){
             // $sumVertical[] = 0;
-            if($i + 1 != $today || $monthFull != date('Ym')){ ///Các ngày khác
+            if($i + 1 != $today){ ///Các ngày khác
                 $earned = [];
                 $acc_index = 0;
                 $sumVertical = 0;
@@ -80,12 +87,12 @@ class earnedController extends Controller
                 $earned[] = $sumVertical;
                 $table[$i+1] = $earned;
             }
-            else if($i + 1 == $today && $monthFull == date('Ym')){           //Ngày hôm nay (chưa ghi vào DB)
+            else if($i+1 == $today && $monthFull == date('Ym')){           //Ngày hôm nay (chưa ghi vào DB)
                 $earned = [];
                 $acc_index = 0;
                 $sumVertical = 0;
                 foreach ($accounts as $acc) {
-                    $address = str_replace('ronin:', '0x', $acc->metamask);
+                    $address = str_replace('ronin:', '0x', $acc->ronin);
                     $url = "https://lunacia.skymavis.com/game-api/clients/".$address."/items/1";
                     $options = array(
                         CURLOPT_RETURNTRANSFER => true,     // return web page
@@ -114,7 +121,17 @@ class earnedController extends Controller
                     // dd($header);
                     $res = json_decode($header['content']);
                     if($res){
+                        // die;
+                        // dd($res);die;
                         $curBalance = intval($res->total);
+                        $claimable = intval($res->claimable_total);
+                        $last_claimed = $res->last_claimed_item_at;
+                        $acc->claimable = $claimable;
+                        $acc->total = $curBalance;
+                        $acc->last_claimed = $last_claimed;
+                        $acc->save();
+
+                        // echo $curBalance;die;
                         $day_yesterday = date('d',strtotime("-1 days"));
                         $month_yesterday = date('Ym',strtotime("-1 days"));
                         $bal_yesterday = balance_eod::where('acc_id', $acc->id)->where('month_id', $month_yesterday)->where('day', $day_yesterday)->first();
@@ -125,9 +142,10 @@ class earnedController extends Controller
                         $earned[] = $curEarned;
                         $sum[$acc_index] += $curEarned;
                         $sumVertical += $curEarned;
-                        // if($acc->id == 20){
-                        //     echo $curBalance.'<br>'.$bal_yesterday->balance;die;
-                        // }
+                    }else{
+                        $earned[] = "ERROR";
+                        // $sum[$acc_index] += 0;
+                        // $sumVertical += 0;
                     }
                     $acc_index++;
                 }
@@ -146,8 +164,8 @@ class earnedController extends Controller
         return view('earned',[
             'accs'=>$accounts,
             'table'=>$table,
-            'month'=>$request->choose_month,
             'link'=>$request->link,
+            'choose_month'=>$request->choose_month
         ]);
         
     }
@@ -165,7 +183,8 @@ class earnedController extends Controller
     public function getSlpEndOfDay(){
         $accounts = DB::table('accounts')->get();
         foreach ($accounts as $acc) {
-            $url = "https://lunacia.skymavis.com/game-api/clients/".$acc->metamask."/items/1";
+            $address = str_replace('ronin:','0x',$acc->ronin);
+            $url = "https://lunacia.skymavis.com/game-api/clients/".$address."/items/1";
             $options = array(
                 CURLOPT_RETURNTRANSFER => true,     // return web page
                 CURLOPT_HEADER         => false,    // don't return headers
@@ -192,6 +211,7 @@ class earnedController extends Controller
             $header['content'] = $content;
             // dd($header);
             $res = json_decode($header['content']);
+            // dd($res);die;
             if($res){
                 $curBalance = intval($res->total);
                 $day_yesterday = date('d',strtotime("-1 days"));
