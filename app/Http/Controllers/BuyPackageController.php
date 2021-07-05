@@ -44,7 +44,7 @@ class BuyPackageController extends Controller
         $investor_id = Auth::user();
         $data = account::where('investor_id',$investor_id)->where('status',1)->get();
         $number =  count($data);
-        $number = 5;
+
         if($package != 180){
             $total = 5 * $number;
         }else {
@@ -67,7 +67,7 @@ class BuyPackageController extends Controller
         $investor_id = Auth::user();
         $data = account::where('investor_id',$investor_id)->where('status',1)->get();
         $number =  count($data);
-        $number = 5;
+
         if($package != 180){
             $total = 5 * $number;
         }else {
