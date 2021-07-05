@@ -29,7 +29,7 @@ Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'auth:admin']
 
 
 Route::group(['middleware'=>'auth:web'],function (){
-    Route::get('earn/{link}', 'earnedController@getSLPearnedPerDay');
+    Route::get('earnedPerDay', 'earnedController@getSLPearnedPerDay');
     Route::get('getSlpEndOfDay', 'earnedController@getSlpEndOfDay');
 
     Route::get('userInfo', 'InvertorController@userInfo');

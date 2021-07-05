@@ -13,7 +13,7 @@ use DateTime;
 use DB;
 use App\balance_eod;
 use App\investor;
-use App\accounts;
+use App\account;
 
 
 
@@ -47,15 +47,18 @@ class earnedController extends Controller
         else
             $numberDay = 30;
 
-        $investor = investor::where('link', $request->link)->first();
+        // $investor = investor::where('link', $request->link)->first();
 
         // dd($investor);die;
 
-        if($investor)
-            $investor_id = $investor->id; 
-        else
-            $investor_id = 1;
-        $accounts = accounts::where('investor_id', $investor_id)->get();
+        // if($investor)
+        //     $investor_id = $investor->id; 
+        // else
+        //     $investor_id = 1;
+
+        $accounts = account::where('investor_id', Auth::user()->id)->get();
+
+        // dd($accounts);
 
         $table = [];
         $sum = [];
