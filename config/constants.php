@@ -55,7 +55,7 @@ return [
             'url' => 'investor',
             'icon' => 'fa fa-users',
             'children' => array(
-                'List' => 'user',
+                'List' => 'admin/investor',
             )
         ),
 

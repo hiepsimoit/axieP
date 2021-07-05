@@ -36,6 +36,7 @@ class AdminInvestorController extends Controller
 
     public function delete($id)
     {
+
         $data = investor::find($id);
         $data->status = -1;
         $data->save();
@@ -48,6 +49,22 @@ class AdminInvestorController extends Controller
         $data->status = 1;
         $data->save();
         return redirect($this->url)->with('message', 'Active thành công!');
+    }
+    public function deletePaid($id)
+    {
+
+        $data = investor::find($id);
+        $data->paid = -1;
+        $data->save();
+        return redirect($this->url)->with('message', 'Delete Paid thành công!');
 
     }
+    public function activePaid($id)
+    {
+        $data = investor::find($id);
+        $data->paid = 1;
+        $data->save();
+        return redirect($this->url)->with('message', 'Active paid thành công!');
+    }
+
 }
