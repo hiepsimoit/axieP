@@ -32,6 +32,7 @@
                 <td>Số lượng tài khoản</td>
                 <td>Thành tiền</td>
                 <td>Mã chuyển tiền</td>
+                <td>Ngày mua</td>
                 <td>Trạng thái</td>
             </tr>
             </thead>
@@ -54,6 +55,9 @@
 
                 <td><?php echo  number_format($item->total_price, 0, ',', '.') .' USD';?></td>
                 <td><?php echo $item->code;?></td>
+                <td class="text-center">
+                    <?php echo date('d/m/Y H:i:s', strtotime($item->created_at));?>
+                </td>
                 <td>
                     <?php switch ($item->status){
                         case  1 :$status  = 'Đã phê duyệt';break;

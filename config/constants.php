@@ -58,6 +58,14 @@ return [
                 'List' => 'admin/investor',
             )
         ),
+        'buy_package' => array(
+            'name' => 'Buy Package',
+            'url' => 'admin/buy_package',
+            'icon' => 'fa fa-users',
+            'children' => array(
+                'List' => 'admin/buy_package',
+            )
+        ),
 
 
         'logout' => array(

@@ -2,17 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="79678ebd-a22e-416b-aea1-d4d3b4441a44" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/resources/views/buy_package/add.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/buy_package/edit.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/buy_package/index.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/AdminInvestorController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/AdminInvestorController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Middleware/RedirectIfAuthenticated.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Middleware/RedirectIfAuthenticated.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/config/constants.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/constants.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/account/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/account/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/investor/addbk.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/investor/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/investor/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layouts/header.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/header.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/buy_package/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/buy_package/index.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -125,7 +117,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/views" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/views/admin" />
     <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RecentsManager">
@@ -133,11 +125,11 @@
       <recent name="$PROJECT_DIR$/resources/views/staff" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources/views/admin" />
+      <recent name="$PROJECT_DIR$/app/Http/Controllers/Admin" />
       <recent name="$PROJECT_DIR$/resources/views" />
       <recent name="$PROJECT_DIR$/config" />
       <recent name="$PROJECT_DIR$/app/Http/Controllers" />
-      <recent name="$PROJECT_DIR$/public" />
-      <recent name="$PROJECT_DIR$/app" />
     </key>
   </component>
   <component name="RunManager">
@@ -161,7 +153,7 @@
       <workItem from="1625238007385" duration="50000" />
       <workItem from="1625238205267" duration="11843000" />
       <workItem from="1625446246114" duration="6564000" />
-      <workItem from="1625453569107" duration="13607000" />
+      <workItem from="1625453569107" duration="15968000" />
     </task>
     <servers />
   </component>
@@ -188,10 +180,10 @@
     </state>
     <state x="378" y="178" width="683" height="486" key="find.popup/0.23.1440.797/0.-745.1366.745@0.23.1440.797" timestamp="1625469902228" />
     <state x="378" y="178" width="683" height="486" key="find.popup/0.23.1440.797@0.23.1440.797" timestamp="1625237145514" />
-    <state x="395" y="86" width="670" height="676" key="search.everywhere.popup" timestamp="1625476966872">
+    <state x="395" y="86" width="670" height="676" key="search.everywhere.popup" timestamp="1625479858605">
       <screen x="0" y="23" width="1440" height="797" />
     </state>
-    <state x="395" y="86" width="670" height="676" key="search.everywhere.popup/0.23.1440.797/0.-745.1366.745@0.23.1440.797" timestamp="1625476966872" />
+    <state x="395" y="86" width="670" height="676" key="search.everywhere.popup/0.23.1440.797/0.-745.1366.745@0.23.1440.797" timestamp="1625479858605" />
     <state x="395" y="86" width="670" height="676" key="search.everywhere.popup/0.23.1440.797@0.23.1440.797" timestamp="1625240103321" />
   </component>
 </project>

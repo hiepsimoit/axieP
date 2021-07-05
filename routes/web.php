@@ -24,6 +24,13 @@ Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'auth:admin']
     Route::get('investor/deletePaid/{id}','AdminInvestorController@deletePaid');
     Route::get('investor/activePaid/{id}','AdminInvestorController@activePaid');
  //   Route::post('investor/delete/{id}','AccountController@postEdit');
+
+
+    Route::get('buy_package', 'AdminBuyPackageController@index');
+    Route::post('buy_package', 'AdminBuyPackageController@index');
+    Route::get('buy_package/delete/{id}','AdminBuyPackageController@delete');
+    Route::get('buy_package/active/{id}','AdminBuyPackageController@active');
+
     Route::get('changePass','AdminUserController@change');
     Route::post('changePass', 'AdminUserController@postChangePass');
     Route::get('logout', 'AdminUserController@adminLogout');
