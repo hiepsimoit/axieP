@@ -82,17 +82,20 @@ class RegisterController extends Controller
             Mail::send([], [], function ($message) use ($data,$link) {
                 $message->to($data['email'])
                //   $message->to('daotung253@gmail.com')
-                ->from('daotung253@gmail.com', 'Đào Thanh Tùng')
+                ->from('quangtung1412@gmail.com', 'Phạm Quang Tùng')
                 ->subject('Kích hoạt tài khoản ' . $data['name'] . ' tại Axie ' )
                 ->setBody('<b>Thân chào  ' . $data['name'] . '!!</b><br><br/>Vui lòng vào
  <a href="'.$link.'"> click vào link</a>để kích
-hoạt tài khoản.<br/>Mọi thắc mắc hoặc yêu cầu hỗ trợ xin liên hệ::033.xxx.xxxx<br/>Trân trọng,<br/>', 'text/html');
+hoạt tài khoản.<br/>Mọi thắc mắc hoặc yêu cầu hỗ trợ xin liên hệ::0376.362.291<br/>Trân trọng,<br/>', 'text/html');
         });
+            // die;
      return   investor::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
-            'status' => 0,
+            'status' => 1,
+            // 'paid'=> 1,
+            // 'vip_time'=>strtotime('+ 5 days'),
             'password' => bcrypt($data['password']),
         ]);
 

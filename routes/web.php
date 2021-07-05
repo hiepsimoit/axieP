@@ -41,6 +41,8 @@ Route::group(['middleware'=>'auth:web'],function (){
     Route::get('earnedPerDay', 'earnedController@getSLPearnedPerDay');
     Route::get('getSlpEndOfDay', 'earnedController@getSlpEndOfDay');
 
+    Route::get('accsInfo', 'AccountController@showAccountsInfo');
+
     Route::get('userInfo', 'InvertorController@userInfo');
     Route::post('userInfo', 'InvertorController@editUserInfo');
     Route::get('logout1', 'InvertorController@logout');

@@ -60,7 +60,7 @@
                 </td>
 
             </tr>
-            <?php $i++; } ?>
+            <?php } ?>
             </tbody>
         </table>
         {{ $data->appends(request()->input())->links() }}

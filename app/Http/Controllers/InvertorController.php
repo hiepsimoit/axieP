@@ -96,6 +96,8 @@ class InvertorController extends Controller
         if ($user->count() > 0) {
             $user->update([
                 'status' => 1,
+                'paid'=>1,
+                'vip_time'=>strtotime('+30 days')
             ]);
             $notification_status = 'Bạn đã xác nhận thành công';
         } else {

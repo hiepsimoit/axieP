@@ -80,11 +80,12 @@
                         </div>
                     </li>
                     <li class=""><a href="{{ url("/") }}">Trang chủ</a></li>
-                    <li class=""><a href="{{ url("earnedPerDay") }}">Thống kê SLP hằng ngày</a></li>
                     <li class=""><a href="{{ url("staff") }}">Quản lý người chơi</a></li>
                     <li class=""><a href="{{ url("account") }}">Quản lý tài khoản</a></li>
-                    <li class=""><a href="{{ url("buy_package/add") }}">Mua gói sử dụng</a></li>
-                    <li class=""><a href="{{ url("buy_package") }}">QL gói </a></li>
+                    <!-- <li class=""><a href="{{ url("buy_package/add") }}">Mua gói sử dụng</a></li> -->
+                    <!-- <li class=""><a href="{{ url("buy_package") }}">QL gói </a></li> -->
+                    <li class=""><a href="{{ url("earnedPerDay") }}">Thống kê SLP hằng ngày</a></li>
+                    <li class=""><a href="{{ url("accsInfo") }}">Accounts Info</a></li>
                 @endguest
             </ul>
 

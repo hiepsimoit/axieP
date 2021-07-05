@@ -4,7 +4,7 @@
 @section('content')
 
 <br>
-<form id="formCV" class="form-inline" enctype="multipart/form-data" action="{{$link}}" method="get">
+<form id="formCV" class="form-inline" enctype="multipart/form-data" action="earnedPerDay" method="get">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <div class="row">
 		<div class="col-md-2">Chọn tháng:</div>
@@ -25,7 +25,7 @@
 		<tr style="background: #af1c3f; color: white;">
 			<th>Ngày</th>
 			@foreach($accs as $var)
-			<th>Acc {{$var->id}}</th>
+			<th>{{$var->acc_name}}</th>
 			@endforeach
 			<th>Tổng</th>
 		</tr>
