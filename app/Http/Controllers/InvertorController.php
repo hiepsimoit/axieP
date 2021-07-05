@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\investor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class InvertorController extends Controller
 {
@@ -16,6 +17,7 @@ class InvertorController extends Controller
         $this->title = ' tài khoản';
         $this->url = '';
     }
+
 
     public function logout()
     {
@@ -73,15 +75,33 @@ class InvertorController extends Controller
         );
         if (!(Hash::check($request->oldPassword, Auth::user()->password))) {
             // The passwords matches
-            return redirect()->back()->with("error","Your current password does not matches with the password you provided. Please try again.");
+            return redirect()->back()->with("error", "Your current password does not matches with the password you provided. Please try again.");
         }
 
         $user = Auth::user();
         $data = $user::find($user->id);
+        $data->password = bcrypt($data['password']);
+        $data->save();
+        return redirect(url('userInfo'))->with('message', 'Cập nhập thành công!');
 
-            $data->password = bcrypt($data['password']);
-            $data->save();
-            return redirect(url('userInfo'))->with('message', 'Cập nhập thành công!');
+    }
 
+    public function confirm($email)
+    {
+
+        $decrypt = Crypt::decryptString($email);
+
+        $user = investor::where('email', $decrypt);
+
+        if ($user->count() > 0) {
+            $user->update([
+                'status' => 1,
+            ]);
+            $notification_status = 'Bạn đã xác nhận thành công';
+        } else {
+            $notification_status = 'Mã xác nhận không chính xác';
+        }
+
+        return redirect(route('login'))->with('status', $notification_status);
     }
 }
