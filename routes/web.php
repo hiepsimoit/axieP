@@ -11,6 +11,22 @@
 |
 */
 
+Route::get('admin/login','Auth\LoginController@showAdminLoginForm');
+Route::post('admin/login', 'Auth\LoginController@adminLogin');
+
+Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'auth:admin'],function (){
+    Route::get('/','AdminController@index');
+
+   Route::get('investor', 'AdminInvestorController@index');
+   Route::post('investor', 'AdminInvestorController@index');
+    Route::get('investor/delete/{id}','AdminInvestorController@delete');
+    Route::get('investor/active/{id}','AdminInvestorController@active');
+ //   Route::post('investor/delete/{id}','AccountController@postEdit');
+    Route::get('changePass','AdminUserController@change');
+    Route::post('changePass', 'AdminUserController@postChangePass');
+    Route::get('logout', 'AdminUserController@adminLogout');
+});
+
 
 Route::group(['middleware'=>'auth:web'],function (){
     Route::get('earn/{link}', 'earnedController@getSLPearnedPerDay');
@@ -47,3 +63,4 @@ Route::get('/', function () {
 });
 Auth::routes();
 
+Route::get('register/confirm/{id}','InvertorController@confirm');

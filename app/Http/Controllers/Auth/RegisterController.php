@@ -8,7 +8,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
 class RegisterController extends Controller
 {
     /*
@@ -29,7 +31,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/login';
 
     /**
      * Create a new controller instance.
@@ -40,7 +42,17 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
     }
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
 
+        event(new Registered($user = $this->create($request->all())));
+        return redirect(route('login'))->with('status', 'Vui lòng vào email xác nhận tài khoản');
+
+
+        return $this->registered($request, $user)
+            ?: redirect($this->redirectPath());
+    }
     /**
      * Get a validator for an incoming registration request.
      *
@@ -64,7 +76,19 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-         investor::create([
+
+        $encrypted = Crypt::encryptString($data['email']);
+        $link  = url('register/confirm/'.$encrypted);
+            Mail::send([], [], function ($message) use ($data,$link) {
+                $message->to($data['email'])
+               //   $message->to('daotung253@gmail.com')
+                ->from('daotung253@gmail.com', 'Đào Thanh Tùng')
+                ->subject('Kích hoạt tài khoản ' . $data['name'] . ' tại Axie ' )
+                ->setBody('<b>Thân chào  ' . $data['name'] . '!!</b><br><br/>Vui lòng vào
+ <a href="'.$link.'"> click vào link</a>để kích
+hoạt tài khoản.<br/>Mọi thắc mắc hoặc yêu cầu hỗ trợ xin liên hệ::033.xxx.xxxx<br/>Trân trọng,<br/>', 'text/html');
+        });
+     return   investor::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'phone' => $data['phone'],
@@ -72,16 +96,6 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
         ]);
 
-        Mail::send([], [], function ($message) use ($data) {
-
-            $message->to($data['email'])
-                //  $message->to('daotung253@gmail.com')
-                ->from('nganq2710@gmail.com', 'Nguyễn Thị Quỳnh Nga')
-                ->subject('Kích hoạt tài khoản _' . $data['name'] . ' tại Axie ' )
-                ->setBody('<b>Thân chào  ' . $data['name'] . '!!</b><br><br/>Vui lòng vào
- <a href=""> click vào link</a>để kích 
-hoạt tài khoản.<br/>Mọi thắc mắc hoặc yêu cầu hỗ trợ xin liên hệ::<br/>Trân trọng,<br/>', 'text/html');
-        });
 
     }
 }
