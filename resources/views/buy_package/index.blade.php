@@ -28,11 +28,12 @@
             <thead>
             <tr>
                 <td>STT</td>
-                <td>Địa chỉ ví ronin</td>
-                <td>Account</td>
+                <td>Gói</td>
+                <td>Số lượng tài khoản</td>
+                <td>Thành tiền</td>
+                <td>Mã chuyển tiền</td>
+                <td>Ngày mua</td>
                 <td>Trạng thái</td>
-
-                <td>Thao tác</td>
             </tr>
             </thead>
             <tbody>
@@ -40,22 +41,29 @@
             foreach  ($data as $item) { ?>
             <tr>
                 <td><?php echo $i; $i++;?></td>
-                <td><?php echo $item->ronin;?></td>
-                <td><?php echo $item->acc_name;?></td>
+                <td><?php
+                    switch ($item->package){
+                        case 15: $pac = '15 ngày';break;
+                        case 30: $pac = '30 ngày';break;
+                        case 180: $pac = '6 tháng';break;
+                        default: $pac = $item->package;break;
+                    }
+                    echo $pac;
+
+                ?></td>
+                <td><?php echo $item->number_acc;?></td>
+
+                <td><?php echo  number_format($item->total_price, 0, ',', '.') .' USD';?></td>
+                <td><?php echo $item->code;?></td>
+                <td class="text-center">
+                    <?php echo date('d/m/Y H:i:s', strtotime($item->created_at));?>
+                </td>
                 <td>
                     <?php switch ($item->status){
-                        case  1 :$status  = 'Đang hoạt động';break;
-                        case  -1 :$status  = 'Đã xóa';break;
+                        case  1 :$status  = 'Đã phê duyệt';break;
+                        case  0 :$status  = 'Chờ phê duyệt';break;
                         default :$status = '';break;
                     } echo $status;?>
-
-                </td>
-
-
-                <td>
-                    <a class="btn btn-default btn-success" href="{{ url($url."/edit/{$item->id}") }}">Chi tiết </a>
-
-                    <a class="confirm btn btn-default btn-danger" href="{{ url($url."/delete/{$item->id}") }}">Hủy</a><br/>
 
                 </td>
 

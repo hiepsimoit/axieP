@@ -21,7 +21,16 @@ Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'auth:admin']
    Route::post('investor', 'AdminInvestorController@index');
     Route::get('investor/delete/{id}','AdminInvestorController@delete');
     Route::get('investor/active/{id}','AdminInvestorController@active');
+    Route::get('investor/deletePaid/{id}','AdminInvestorController@deletePaid');
+    Route::get('investor/activePaid/{id}','AdminInvestorController@activePaid');
  //   Route::post('investor/delete/{id}','AccountController@postEdit');
+
+
+    Route::get('buy_package', 'AdminBuyPackageController@index');
+    Route::post('buy_package', 'AdminBuyPackageController@index');
+    Route::get('buy_package/delete/{id}','AdminBuyPackageController@delete');
+    Route::get('buy_package/active/{id}','AdminBuyPackageController@active');
+
     Route::get('changePass','AdminUserController@change');
     Route::post('changePass', 'AdminUserController@postChangePass');
     Route::get('logout', 'AdminUserController@adminLogout');
@@ -57,6 +66,16 @@ Route::group(['middleware'=>'auth:web'],function (){
         Route::get('delete/{id}','AccountController@delete');
         Route::post('edit/{id}','AccountController@postEdit');
     });
+    Route::group(['prefix'=>'buy_package'],function (){
+        Route::get('/','BuyPackageController@index');
+        Route::post('/','BuyPackageController@index');
+        Route::get('add','BuyPackageController@add');
+        Route::post('add','BuyPackageController@postAdd');
+        Route::get('edit/{id}','BuyPackageController@edit');
+        Route::get('delete/{id}','BuyPackageController@delete');
+        Route::post('edit/{id}','BuyPackageController@postEdit');
+    });
+    Route::post('getTotalBuyPackage','BuyPackageController@getTotalBuyPackage');
 });
 Route::get('/', function () {
     return view('auth.login');
