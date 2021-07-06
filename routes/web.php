@@ -77,9 +77,7 @@ Route::group(['middleware'=>'auth:web'],function (){
     });
     Route::post('getTotalBuyPackage','BuyPackageController@getTotalBuyPackage');
 });
-Route::get('/', function () {
-    return view('auth.login');
-});
+Route::get('/', 'Auth\LoginController@showLoginForm');
 Auth::routes();
 
 Route::get('register/confirm/{id}','InvertorController@confirm');
