@@ -122,11 +122,12 @@ class AccountController extends Controller
 
     public function showAccountsInfo(Request $request){
         $vip_time = Auth::user()->vip_time;
-
+        
         if(date('now') > $vip_time || !Auth::user()->paid){
             return view('buy_package.add', ['title' => "Mua gói sử dụng" , 'url' => 'buy_package'])->with('message', 'Thật tiếc! Gói VIP của bạn đã hết! Hãy mua thêm nhé!');
         }
-
+        set_time_limit(0);
+        
         $accs = account::join('staffs', 'staffs.id', '=', 'accounts.staff_id')
         ->select('staffs.name as staff_name', 'accounts.acc_name', 'accounts.ronin')
         ->where('accounts.investor_id', Auth::user()->id)
