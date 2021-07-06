@@ -17,35 +17,35 @@
 	</div>
 	
 </form>
-
-<table class="table select_table my-table table-bordered">
-	<!-- <col width="50px"> -->
-	
-	<thead>
-		<tr style="background: #af1c3f; color: white;">
-			<th>Ngày</th>
-			@foreach($accs as $var)
-			<th>{{$var->acc_name}}</th>
-			@endforeach
-			<th>Tổng</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach ($table as $key => $value)
-			<tr style="@if($key == 'Tổng') background-color: #ffd52b; font-weight: bold; @endif">
-				<td>
-					{{$key}}
-				</td>
-				@foreach($value as $data)
-				<td>
-				{{$data}}
-				</td>
+<div style="overflow-x:auto;">
+	<table class="my-table">
+		<thead>
+			<tr style="background: #af1c3f; color: white;">
+				<th>Ngày</th>
+				@foreach($accs as $var)
+				<th>{{$var->acc_name}}</th>
 				@endforeach
+				<th>Tổng</th>
 			</tr>
-		@endforeach
+		</thead>
+		<tbody>
+			@foreach ($table as $key => $value)
+				<tr style="@if($key == 'Tổng') background-color: #ffd52b; font-weight: bold; @endif">
+					<td>
+						{{$key}}
+					</td>
+					@foreach($value as $data)
+					<td>
+					{{$data}}
+					</td>
+					@endforeach
+				</tr>
+			@endforeach
 
-	</tbody>
-</table>
+		</tbody>
+	</table>
+</div>
+
 
 <script>
 	

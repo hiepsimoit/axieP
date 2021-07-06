@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\staff;
+use App\staff_salary;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,8 +49,8 @@ class StaffController extends Controller
             'salary' => "required|max:255",
         ], [
                 'name.required' => 'Bạn phải nhập tên',
-                'bank_acc.required' => 'Bạn phải nhập số tài khoản',
-                'bank_name.required' => 'Bạn phải nhập ngân hàng',
+                // 'bank_acc.required' => 'Bạn phải nhập số tài khoản',
+                // 'bank_name.required' => 'Bạn phải nhập ngân hàng',
                 'salary.required' => 'Bạn phải nhập lương',
                 'salary.max' => 'Lương tối đa 255 kí tự',
                 'bank_name.max' => 'Ngân hàng tối đa 255 kí tự',
