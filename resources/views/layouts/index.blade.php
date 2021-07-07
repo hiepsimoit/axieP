@@ -40,7 +40,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <h1 class="text-center text-uppercase pageTitle">  @yield('titlePage')</h1>
+                <h1 class="text-left text-uppercase pageTitle">  @yield('titlePage')</h1>
             </div>
         </div>
         @if($errors->any())

@@ -5,7 +5,7 @@
     <form id="form-danhba" action="{{$url}}" method="post">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <div class="form-group row">
-            <label class="col-label">Mgười chơi</label>
+            <label class="col-m-1">Người chơi</label>
             <div class="col-md-4">
                 <input type="text" name="name"
                        value="{{ !empty($input['name']) ? $input['name']: '' }}"
@@ -16,11 +16,11 @@
 
         <div class="form-group row">
             <div class="col-md-12">
-                <button class="btn btn-default btn-danger btn-search-cv" type="submit">Tìm kiếm</button>
+                <button class="btn " type="submit">Tìm kiếm</button>
             </div>
         </div>
     </form>
-    <a class="btn btn-danger pull-left" href="{{ url($url."/add/") }}">Tạo mới </a>
+    <a class="btn  pull-left" href="{{ url($url."/add/") }}">Tạo mới </a>
 
     <div id="result">
         <?php if(!empty($data)) { ?>
@@ -31,7 +31,6 @@
                 <td>Địa chỉ ví ronin</td>
                 <td>Account</td>
                 <td>Trạng thái</td>
-
                 <td>Thao tác</td>
             </tr>
             </thead>
