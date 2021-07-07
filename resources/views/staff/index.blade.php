@@ -55,13 +55,15 @@
                 </td>
                 <td>
                     <a class="btn btn-default btn-success" href="{{ url($url."/edit/{$item->id}") }}">Chi tiết </a>
-
+                    <?php if($item->status ==1){ ?>
                     <a class="confirm btn btn-default btn-danger" href="{{ url($url."/delete/{$item->id}") }}">Hủy</a><br/>
-
+                  <?php  } else { ?>
+                    <a class="confirm btn btn-default btn-danger" href="{{ url($url."/active/{$item->id}") }}">Khôi phục</a><br/>
+                    <?php } ?>
                 </td>
 
             </tr>
-            <?php $i++; } ?>
+            <?php } ?>
             </tbody>
         </table>
         {{ $data->appends(request()->input())->links() }}

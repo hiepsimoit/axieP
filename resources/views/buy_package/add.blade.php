@@ -16,7 +16,7 @@
                 </select>
             </div>
         </div>
-        <div class="row">
+        <div class="row form-group">
             <div class="col-md-9">
                 <label> Thành tiền </label>
                 <p id="total"></p>

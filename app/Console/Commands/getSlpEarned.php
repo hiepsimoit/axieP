@@ -50,7 +50,8 @@ class getSlpEarned extends Command
         $accounts = DB::table('accounts')->get();
         $isError = 0;
         foreach ($accounts as $acc) {
-            $url = "https://lunacia.skymavis.com/game-api/clients/".$acc->metamask."/items/1";
+            $address = str_replace('ronin:','0x',$acc->ronin);
+            $url = "https://lunacia.skymavis.com/game-api/clients/".$address."/items/1";
             $options = array(
                 CURLOPT_RETURNTRANSFER => true,     // return web page
                 CURLOPT_HEADER         => false,    // don't return headers
@@ -107,7 +108,6 @@ class getSlpEarned extends Command
             else{
                 $isError = 1;
             }
-            
         }
         if($isError)
             DB::table('logs')->insert(['action'=>date('Y-m-d H:i:s').' - Get SLP - ERROR!']);

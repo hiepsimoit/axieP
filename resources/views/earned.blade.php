@@ -4,45 +4,48 @@
 @section('content')
 
 <br>
-<form id="formCV" class="form-inline" enctype="multipart/form-data" action="earn" method="post">
+<form id="formCV" class="form-inline" enctype="multipart/form-data" action="earnedPerDay" method="get">
     <input type="hidden" name="_token" value="{{ csrf_token() }}">
     <div class="row">
 		<div class="col-md-2">Chọn tháng:</div>
 		<div class="col-md-2">
-			<input type="text" id="choose_month" name="choose_month" class="form-control dtMonthPicker" value="{{date('m/Y')}}">
+			<input type="text" id="choose_month" name="choose_month" class="form-control dtMonthPicker" value="@if($choose_month) {{$choose_month}} @else {{date('m/Y')}}@endif">
 		</div>
-		
+		<div class="col-md-2">
+			<button type="submit" class="btn btn-success" id="button_search" name="button_search">Search</button>
+		</div>
 	</div>
-</form>
-
-<table class="table select_table my-table table-bordered">
-	<!-- <col width="50px"> -->
 	
-	<thead>
-		<tr style="background: #af1c3f; color: white;">
-			<th>Ngày</th>
-			@foreach($accs as $var)
-			<th>Acc {{$var->id}}</th>
-			@endforeach
-			<th>Tổng</th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach ($table as $key => $value)
-			<tr style="@if($key == 'Tổng') background-color: #ffd52b; font-weight: bold; @endif">
-				<td>
-					{{$key}}
-				</td>
-				@foreach($value as $data)
-				<td>
-				{{$data}}
-				</td>
+</form>
+<div id="result">
+	<table class="table table-list table-condensed table-bordered table-hover tableLoa">
+		<thead>
+			<tr style="background: #af1c3f; color: white;">
+				<th>Ngày</th>
+				@foreach($accs as $var)
+				<th>{{$var->acc_name}}</th>
 				@endforeach
+				<th>Tổng</th>
 			</tr>
-		@endforeach
+		</thead>
+		<tbody>
+			@foreach ($table as $key => $value)
+				<tr style="@if($key == 'Tổng') background-color: #ffd52b; font-weight: bold; @endif">
+					<td>
+						{{$key}}
+					</td>
+					@foreach($value as $data)
+					<td>
+					{{  number_format($data, 0, ',', '.')}}
+					</td>
+					@endforeach
+				</tr>
+			@endforeach
 
-	</tbody>
-</table>
+		</tbody>
+	</table>
+</div>
+
 
 <script>
 	

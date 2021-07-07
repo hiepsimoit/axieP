@@ -23,7 +23,7 @@
                 <input type="text" class="form-control" maxlength="100"  name="ronin" value="{{ old('ronin') }}">
             </div>
         </div>
-        <div class="row">
+        <div class="row form-group">
             <div class="col-md-9">
                 <label> Account name </label>
                 <input type="text" class="form-control" maxlength="45"  name="acc_name" value="{{ old('acc_name') }}">

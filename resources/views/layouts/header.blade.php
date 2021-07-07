@@ -54,12 +54,15 @@
                         </ul>
 
                     </li>
+
                 @endguest
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
 
+
 <slider id="slider">
     <img style=" width: 100%;" class="backgound" src="{{ asset('public/css/images/headers.png') }}">
 </slider>
+

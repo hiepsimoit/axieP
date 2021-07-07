@@ -57,6 +57,7 @@ Route::group(['middleware'=>'auth:web'],function (){
         Route::get('edit/{id}','StaffController@edit');
         Route::get('delete/{id}','StaffController@delete');
         Route::post('edit/{id}','StaffController@postEdit');
+        Route::get('active/{id}','StaffController@active');
     });
 
     Route::group(['prefix'=>'account'],function (){
@@ -75,6 +76,7 @@ Route::group(['middleware'=>'auth:web'],function (){
         Route::post('add','BuyPackageController@postAdd');
         Route::get('edit/{id}','BuyPackageController@edit');
         Route::get('delete/{id}','BuyPackageController@delete');
+
         Route::post('edit/{id}','BuyPackageController@postEdit');
     });
     Route::post('getTotalBuyPackage','BuyPackageController@getTotalBuyPackage');

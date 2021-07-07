@@ -6,7 +6,7 @@
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-12">
                 <label> Tên </label>
                 <input type="text" class="form-control" maxlength="255"  name="name" value="{{ old('name') }}">
             </div>
@@ -23,14 +23,14 @@
                 <input type="text" class="form-control" maxlength="255"  name="bank_name"  value="{{ old('bank_name')  }}">
             </div>
         </div>
-        <div class="row">
+        <div class="row form-group">
             <div class="col-md-12">
                 <label> Lương </label>
                 <input type="text" class="form-control" maxlength="255"  onkeyup="FormatNumber(this)"  name="salary"  value="{{ old('salary')  }}">
             </div>
         </div>
 
-        <div class="row">
+        <div class="row form-group">
             <div class="col-md-12">
                 <input type="submit" class="btn"   name="submit" value="Tạo" ></input>
                 <a class="btn btn-default" href="{{ url('') }}">Thoát</a>

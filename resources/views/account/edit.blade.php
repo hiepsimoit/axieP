@@ -44,13 +44,13 @@
         </div>
         <div class="row">
             <div class="col-md-9">
-                <label>total </label>
+                <label>last_claimed </label>
                 <input type="text" disabled class="form-control" maxlength="45"  name="" value="{{ $data->last_claimed }}">
             </div>
         </div>
-        <div class="row">
+        <div class="row form-group">
             <div class="col-md-9">
-                <label>total </label>
+                <label>next_claimable </label>
                 <input type="text" disabled class="form-control" maxlength="45"  name="" value="{{ $data->next_claimable }}">
             </div>
         </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\staff;
+use App\staff_salary;
 use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,8 @@ class StaffController extends Controller
         $this->url = 'staff';
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $input = $request->all();
         $name = $request->name;
         $investor_id = Auth::user()->id;
@@ -28,13 +30,15 @@ class StaffController extends Controller
                     $query->where('staffs.name', 'like', '%' . $name . '%');
                 }
             })
-            ->where('staffs.investor_id',$investor_id)
+            ->where('staffs.investor_id', $investor_id)
             ->orderBy('staffs.id', 'DESC')
             ->paginate(20);
 
-        return view( $this->url . '.index', ['data' => $data,'input' => $input, 'title' => "Quản lý " . $this->title, 'url' => $this->url]);
+        return view($this->url . '.index', ['data' => $data, 'input' => $input, 'title' => "Quản lý " . $this->title, 'url' => $this->url]);
     }
-    public  function add(){
+
+    public function add()
+    {
         return view($this->url . '.add', ['title' => "Tạo " . $this->title, 'url' => $this->url]);
     }
 
@@ -48,8 +52,8 @@ class StaffController extends Controller
             'salary' => "required|max:255",
         ], [
                 'name.required' => 'Bạn phải nhập tên',
-                'bank_acc.required' => 'Bạn phải nhập số tài khoản',
-                'bank_name.required' => 'Bạn phải nhập ngân hàng',
+                // 'bank_acc.required' => 'Bạn phải nhập số tài khoản',
+                // 'bank_name.required' => 'Bạn phải nhập ngân hàng',
                 'salary.required' => 'Bạn phải nhập lương',
                 'salary.max' => 'Lương tối đa 255 kí tự',
                 'bank_name.max' => 'Ngân hàng tối đa 255 kí tự',
@@ -62,28 +66,35 @@ class StaffController extends Controller
         $newStaff->name = $request->name;
         $newStaff->bank_acc = $request->bank_acc;
         $newStaff->bank_name = $request->bank_name;
-        $newStaff->salary = str_replace('.','',$request->salary);
-          $user = Auth::user();
+        $newStaff->salary = str_replace('.', '', $request->salary);
+        $user = Auth::user();
         $newStaff->investor_id = $user->id;
         $newStaff->status = 1;
         $newStaff->save();
+        $id = $newStaff->id;
+        $newSalary = new staff_salary();
+        $newSalary->staff_id = $id;
+        $newSalary->salary = str_replace('.', '', $request->salary);
+        $newSalary->save();
         return redirect($this->url)->with('message', 'Tạo thành công!');
 
     }
-    public  function edit($id){
+
+    public function edit($id)
+    {
         $data = staff::find($id);
         $user = Auth::user();
-        if($data->investor_id == $user->id){
-            return view($this->url . '.edit', ['data'=>$data,'title' => "Sửa " . $this->title, 'url' => $this->url]);
+        if ($data->investor_id == $user->id) {
+            return view($this->url . '.edit', ['data' => $data, 'title' => "Sửa " . $this->title, 'url' => $this->url]);
         }
 
     }
 
-    public function postEdit(Request $request,$id)
+    public function postEdit(Request $request, $id)
     {
         $data = staff::find($id);
         $user = Auth::user();
-        if($data->investor_id == $user->id) {
+        if ($data->investor_id == $user->id) {
             $this->validate($request, [
                 'name' => "required|max:255",
                 'bank_acc' => "required|max:255",
@@ -102,6 +113,7 @@ class StaffController extends Controller
             );
 
             $newStaff = staff::find($id);
+            $oldSalary = $newStaff->salary;
             $newStaff->name = $request->name;
             $newStaff->bank_acc = $request->bank_acc;
             $newStaff->bank_name = $request->bank_name;
@@ -110,18 +122,37 @@ class StaffController extends Controller
             $newStaff->investor_id = $user->id;
 
             $newStaff->save();
+            if (str_replace('.', '', $request->salary) != $oldSalary) {
+                $newSalary = new staff_salary();
+                $newSalary->staff_id = $id;
+                $newSalary->salary = str_replace('.', '', $request->salary);
+                $newSalary->save();
+            }
             return redirect($this->url)->with('message', 'Sửa thành công!');
         }
 
     }
 
-    public  function delete($id){
+    public function delete($id)
+    {
         $data = staff::find($id);
         $user = Auth::user();
-        if($data->investor_id == $user->id){
+        if ($data->investor_id == $user->id) {
             $data->status = -1;
             $data->save();
             return redirect($this->url)->with('message', 'Xóa thành công!');
+        }
+
+    }
+
+    public function active($id)
+    {
+        $data = staff::find($id);
+        $user = Auth::user();
+        if ($data->investor_id == $user->id) {
+            $data->status = 1;
+            $data->save();
+            return redirect($this->url)->with('message', 'Khôi phục thành công!');
         }
 
     }
