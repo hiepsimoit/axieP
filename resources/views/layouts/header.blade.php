@@ -1,5 +1,4 @@
 
-
 <nav id="header" class="navbar navbar-default">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -62,5 +61,5 @@
 </nav>
 
 <slider id="slider">
-    <img style="height: 100%; width: 100%;" class="backgound" src="{{ asset('public/css/images/headers.png') }}">
+    <img style=" width: 100%;" class="backgound" src="{{ asset('public/css/images/headers.png') }}">
 </slider>
