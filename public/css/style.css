@@ -102,6 +102,13 @@ a {
     background: var(--gradient-main);
     /*background-color: -internal-light-dark(rgb(239, 239, 239), rgb(59, 59, 59));*/
 }
+ .table thead{
+     background: var(--gradient-main);
+
+ }
+.table thead tr td,.table thead tr th{
+    color: #fff;
+}
  a.btn{
      padding-top: 10px;
  }

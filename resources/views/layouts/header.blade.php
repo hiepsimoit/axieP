@@ -62,7 +62,3 @@
 </nav>
 
 
-<slider id="slider">
-    <img style=" width: 100%;" class="backgound" src="{{ asset('public/css/images/headers.png') }}">
-</slider>
-

@@ -4,6 +4,9 @@
     <list default="true" id="79678ebd-a22e-416b-aea1-d4d3b4441a44" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/account/acc_info.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/account/acc_info.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/earned.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/earned.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/layouts/header.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/header.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,16 +178,17 @@
     </state>
     <state x="164" y="-731" width="1202" height="587" key="dock-window-1/0.23.1440.797/0.-745.1366.745@0.23.1440.797" timestamp="1625446380624" />
     <state x="164" y="169" width="1202" height="587" key="dock-window-1/0.23.1440.797@0.23.1440.797" timestamp="1625306762695" />
-    <state x="378" y="178" width="683" height="486" key="find.popup" timestamp="1625469902228">
+    <state x="378" y="178" width="683" height="486" key="find.popup" timestamp="1625672473667">
       <screen x="0" y="23" width="1440" height="797" />
     </state>
     <state x="378" y="178" width="683" height="486" key="find.popup/0.23.1440.797/0.-745.1366.745@0.23.1440.797" timestamp="1625469902228" />
+    <state x="378" y="178" width="683" height="486" key="find.popup/0.23.1440.797/1440.-9.1920.1057@0.23.1440.797" timestamp="1625672473667" />
     <state x="378" y="178" width="683" height="486" key="find.popup/0.23.1440.797@0.23.1440.797" timestamp="1625237145514" />
-    <state x="395" y="86" width="670" height="676" key="search.everywhere.popup" timestamp="1625671954388">
+    <state x="395" y="86" width="670" height="676" key="search.everywhere.popup" timestamp="1625672780069">
       <screen x="0" y="23" width="1440" height="797" />
     </state>
     <state x="395" y="86" width="670" height="676" key="search.everywhere.popup/0.23.1440.797/0.-745.1366.745@0.23.1440.797" timestamp="1625652751901" />
-    <state x="395" y="86" width="670" height="676" key="search.everywhere.popup/0.23.1440.797/1440.-9.1920.1057@0.23.1440.797" timestamp="1625671954388" />
+    <state x="395" y="86" width="670" height="676" key="search.everywhere.popup/0.23.1440.797/1440.-9.1920.1057@0.23.1440.797" timestamp="1625672780069" />
     <state x="395" y="86" width="670" height="676" key="search.everywhere.popup/0.23.1440.797@0.23.1440.797" timestamp="1625240103321" />
   </component>
 </project>

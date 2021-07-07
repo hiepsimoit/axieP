@@ -20,7 +20,7 @@
 <div id="result">
 	<table class="table table-list table-condensed table-bordered table-hover tableLoa">
 		<thead>
-			<tr style="background: #af1c3f; color: white;">
+			<tr style="">
 				<th>Ngày</th>
 				@foreach($accs as $var)
 				<th>{{$var->acc_name}}</th>

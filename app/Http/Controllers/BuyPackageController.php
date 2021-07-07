@@ -42,7 +42,7 @@ class BuyPackageController extends Controller
         );
         $package  = $request->package;
         $investor_id = Auth::user();
-        $data = account::where('investor_id',$investor_id)->where('status',1)->get();
+        $data = account::where('investor_id',$investor_id->id)->where('status',1)->get();
         $number =  count($data);
 
         if($package != 180){
@@ -65,7 +65,7 @@ class BuyPackageController extends Controller
     public function getTotalBuyPackage(Request $request){
         $package  = $request->package;
         $investor_id = Auth::user();
-        $data = account::where('investor_id',$investor_id)->where('status',1)->get();
+        $data = account::where('investor_id',$investor_id->id)->where('status',1)->get();
         $number =  count($data);
 
         if($package != 180){

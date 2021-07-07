@@ -7,7 +7,7 @@
 	<!-- <col width="50px"> -->
 	
 	<thead>
-		<tr style="background: #af1c3f; color: white;">
+		<tr style="">
 			<th colspan="1" rowspan="2">STT</th>
 			<th colspan="1" rowspan="2">Người chơi</th>
 			<th colspan="1" rowspan="2">Account</th>
@@ -17,7 +17,7 @@
 			<th colspan="1" rowspan="2">Rank</th>
 
 		</tr>
-		<tr style="background: #af1c3f; color: white;">
+		<tr style="">
 			<th colspan="1" rowspan="1">Trung bình</th>
 			<th colspan="1" rowspan="1">Đã claim</th>
 			<th colspan="1" rowspan="1">Chưa claim</th>
