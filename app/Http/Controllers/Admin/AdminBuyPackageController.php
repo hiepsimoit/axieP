@@ -38,10 +38,18 @@ class AdminBuyPackageController extends Controller
 
     public function active($id)
     {
+
         $data = buy_package::find($id);
         $data->status = 1;
         $data->save();
-        return redirect($this->url)->with('message', 'Đã cộng thành công!');
+
+        $getAccount= DB::table('buy_package_detail')
+            ->where('buy_id',$id)
+            ->distinct()
+            ->pluck('account_id')->toArray();
+        DB::table('accounts')->whereIn('id', $getAccount)->update(array('isExpired' => 1));
+
+        return redirect('admin/buy_package')->with('message', 'Đã cộng thành công!');
     }
 
 }

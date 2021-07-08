@@ -74,7 +74,7 @@
             </td>
             <td>
             <?php if($item->status == 0){ ?>
-            <a href="{{ url('admin/buy_package/acitve/'.$item->id )}}" title="Cập nhật"
+            <a href="{{ url('admin/buy_package/active/'.$item->id )}}" title="Cập nhật"
                class="btn btn-primary pull-left" style="margin-right: 10px"><span
                         class="fa fa-edit "></span></a>
             <?php } ?>

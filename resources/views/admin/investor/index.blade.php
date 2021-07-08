@@ -79,7 +79,7 @@
                 </td>
                 <td>
                     <?php if($item->paid == -1){ ?>
-                    <a href="{{ url('admin/investor/acitvePaid/'.$item->id )}}" title="Active Paid"
+                    <a href="{{ url('admin/investor/activePaid/'.$item->id )}}" title="Active Paid"
                        class="btn btn-primary pull-left" style="margin-right: 10px"><span
                                 class="fa fa-edit "></span></a>
                     <?php } ?>
@@ -88,7 +88,7 @@
                        class="btn btn-primary pull-left" style="margin-right: 10px"><span class="fa fa-remove "></span></a>
                     <?php } ?>
                     <?php if($item->status == -1){ ?>
-                    <a href="{{ url('admin/investor/acitve/'.$item->id )}}" title="Mở khóa"
+                    <a href="{{ url('admin/investor/active/'.$item->id )}}" title="Mở khóa"
                        class="btn btn-primary pull-left" style="margin-right: 10px"><span
                                 class="fa fa-edit "></span></a>
                     <?php } ?>

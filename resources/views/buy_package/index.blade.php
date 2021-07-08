@@ -80,5 +80,6 @@
         $('.confirm').click(function(){
             return confirm('Bạn có xác nhận xóa hay ko?');
         });
+
     </script>
 @endsection
