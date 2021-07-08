@@ -18,10 +18,12 @@
                 @guest
                 @else
                     <li class="nav-item"><a class="{{ (request()->is('/')) ? 'active' : '' }}" href="{{ url("/") }}">Trang chủ</a></li>
-                    <li class="nav-item"><a class="{{ (request()->is('earnedPerDay')) ? 'active' : '' }}" href="{{ url("earnedPerDay") }}">Thống kê SLP hằng ngày</a></li>
-                    <li class="nav-item"><a class="{{ (request()->is('staff')) ? 'active' : '' }}" href="{{ url("staff") }}">Quản lý người chơi</a></li>
-                    <li class="nav-item"><a  class="{{ (request()->is('account')) ? 'active' : '' }}" href="{{ url("account") }}">Quản lý tài khoản</a></li>
-                    <li class="nav-item"><a class="{{ (request()->is('buy_package/add')) ? 'active' : '' }}" href="{{ url("buy_package/add") }}">Mua gói sử dụng</a></li>
+                    
+                    <li class="nav-item"><a class="{{ (request()->is('staff')) ? 'active' : '' }}" href="{{ url("staff") }}">Scholarships</a></li>
+                    <li class="nav-item"><a  class="{{ (request()->is('account')) ? 'active' : '' }}" href="{{ url("account") }}">Accounts</a></li>
+                    <li class="nav-item"><a class="{{ (request()->is('earnedPerDay')) ? 'active' : '' }}" href="{{ url("earnedPerDay") }}">SLP hàng ngày</a></li>
+                    <li class="nav-item"><a class="{{ (request()->is('earnedPerDay')) ? 'active' : '' }}" href="{{ url("accsInfo") }}">Thông tin các acc</a></li>
+                    <li class="nav-item"><a class="{{ (request()->is('buy_package/add')) ? 'active' : '' }}" href="{{ url("buy_package/add") }}">BUY</a></li>
                     <li class="nav-item"><a  class="{{ (request()->is('buy_package')) ? 'active' : '' }}" href="{{ url("buy_package") }}">QL gói </a></li>
 
                 @endguest

@@ -183,7 +183,7 @@ class AccountController extends Controller
 
                 $now = time(); // or your date as well
                 $datediff = $now - $last_claimed;
-                $everage = round(($curBalance - $claimable) / round($datediff / (60 * 60 * 24)));
+                $everage = round(($curBalance - $claimable) / (round($datediff / (60 * 60 * 24)) + 1));
                 $info[] = $everage;
 
                 $info[] = $claimable;
