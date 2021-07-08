@@ -30,6 +30,7 @@
                 <td>STT</td>
                 <td>Địa chỉ ví ronin</td>
                 <td>Account</td>
+                <td>Ngày hết hạn</td>
                 <td>Trạng thái</td>
                 <td>Thao tác</td>
             </tr>
@@ -41,6 +42,12 @@
                 <td><?php echo $i; $i++;?></td>
                 <td><?php echo $item->ronin;?></td>
                 <td><?php echo $item->acc_name;?></td>
+                <td><?php
+                    if($item->expiredDate){
+                        $dateTime = DateTime::createFromFormat('Ymd',$item->expiredDate);
+                        echo ($dateTime->format('d/m/Y'));
+                    }
+                    ?></td>
                 <td>
                     <?php switch ($item->status){
                         case  1 :$status  = 'Đang hoạt động';break;

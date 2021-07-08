@@ -60,7 +60,7 @@ return [
         ),
         'buy_package' => array(
             'name' => 'Buy Package',
-            'url' => 'admin/buy_package',
+            'url' => 'buy_package',
             'icon' => 'fa fa-users',
             'children' => array(
                 'List' => 'admin/buy_package',
