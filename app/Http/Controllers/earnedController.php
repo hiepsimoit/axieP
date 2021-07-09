@@ -64,7 +64,7 @@ class earnedController extends Controller
         // else
         //     $investor_id = 1;
 
-        $accounts = account::where('investor_id', Auth::user()->id)->get();
+        $accounts = account::where('investor_id', Auth::user()->id)->where('status', 1)->get();
 
         // dd($accounts);
 
