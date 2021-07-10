@@ -5,7 +5,7 @@
     <form id="form-danhba" action="{{$url}}" method="post">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <div class="form-group row">
-            <label class="col-label">Mgười chơi</label>
+            <label class="col-label">Người chơi</label>
             <div class="col-md-4">
                 <input type="text" name="name"
                        value="{{ !empty($input['name']) ? $input['name']: '' }}"
