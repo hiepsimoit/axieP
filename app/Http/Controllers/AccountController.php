@@ -121,6 +121,8 @@ class AccountController extends Controller
 
 
     public function showAccountsInfo(Request $request){
+        // echo date('H:i');die;
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
         $vip_time = Auth::user()->vip_time;
         
         if(date('now') > $vip_time || !Auth::user()->paid){
@@ -129,12 +131,13 @@ class AccountController extends Controller
         set_time_limit(0);
         
         $accs = account::join('staffs', 'staffs.id', '=', 'accounts.staff_id')
-        ->select('staffs.name as staff_name', 'accounts.acc_name', 'accounts.ronin')
+        ->select('staffs.name as staff_name', 'accounts.acc_name', 'accounts.ronin', 'accounts.id as acc_id')
         ->where('accounts.investor_id', Auth::user()->id)
         ->where('accounts.status', 1)
         ->get();
 
         $table = [];
+        $totalSLP = 0;
         foreach ($accs as $acc) {
             $info = [];
 
@@ -170,7 +173,9 @@ class AccountController extends Controller
             if($res){
                 // die;
                 // dd($res);die;
+                $acc_id = $acc->id;
                 $curBalance = intval($res->total);
+                $totalSLP += $curBalance;
                 $claimable = intval($res->claimable_total);
                 $last_claimed = $res->last_claimed_item_at;
                 $acc->claimable = $claimable;
@@ -178,12 +183,19 @@ class AccountController extends Controller
                 $acc->last_claimed = $last_claimed;
                 $acc->save();
 
+                // echo $last_claimed;die;
+                // echo date('Y-m-d H:i', $last_claimed);die;
+
                 $info[] = $acc->staff_name;
                 $info[] = $acc->acc_name;
 
                 $now = time(); // or your date as well
                 $datediff = $now - $last_claimed;
-                $everage = round(($curBalance - $claimable) / (round($datediff / (60 * 60 * 24)) + 1));
+                $datediff = round($datediff / (60 * 60 * 24));
+                if($datediff != 0)
+                    $everage = round(($curBalance - $claimable) / $datediff);
+                else
+                    $everage = "N/A";
                 $info[] = $everage;
 
                 $info[] = $claimable;
@@ -208,7 +220,9 @@ class AccountController extends Controller
                 libxml_use_internal_errors(false);
                 $highlighted = $dom->getElementsByTagName('td');
                 $info[] = $highlighted[3]->textContent;
-
+                $info[] = $last_claimed + 60 * 60 * 24 * 15;
+                // $info[] = $acc->acc_id;
+                // echo $acc->acc_id;die;
                 $table[] = $info;
             }else{
                 $earned[] = "ERROR";
@@ -217,6 +231,8 @@ class AccountController extends Controller
             }
         }
 
-        return view('account.acc_info', ['table'=>$table]);
+        return view('account.acc_info', ['table'=>$table, 'totalSLP'=>$totalSLP]);
     }
+
+    
 }

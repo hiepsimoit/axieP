@@ -12,6 +12,7 @@ use DateTime;
 use DB;
 use App\balance_eod;
 use App\investor;
+use App\account;
 
 class getSlpEarned extends Command
 {
@@ -47,7 +48,7 @@ class getSlpEarned extends Command
     public function handle()
     {
         set_time_limit(0);
-        $accounts = DB::table('accounts')->get();
+        $accounts = account::get();
         $isError = 0;
         foreach ($accounts as $acc) {
             $address = str_replace('ronin:','0x',$acc->ronin);
@@ -85,20 +86,45 @@ class getSlpEarned extends Command
                 $bal_yesterday = balance_eod::where('acc_id', $acc->id)->where('month_id', $month_yesterday)->where('day', $day_yesterday)->first();
                 $bal_today = balance_eod::where('acc_id', $acc->id)->where('month_id', date('Ym'))->where('day', date('d'))->first();
                 if(!$bal_today){
-                    $earned = new balance_eod();
-                    $earned->investor_id = $acc->investor_id;
-                    $earned->acc_id = $acc->id;
-                    $earned->month_id = date("Ym");
-                    $earned->day = date("d");
-                    if($bal_yesterday)
-                        $earned->earned = $curBalance - $bal_yesterday->balance;
-                    else
-                        $earned->earned = $curBalance;
-                    $earned->balance = $curBalance;
-                    $earned->save();
+                    $bal_today = new balance_eod();
+                    $bal_today->investor_id = $acc->investor_id;
+                    $bal_today->acc_id = $acc->id;
+                    $bal_today->month_id = date("Ym");
+                    $bal_today->day = date("d");
+                    if($bal_yesterday){
+                        $earnTemp = $curBalance - $bal_yesterday->balance;
+                        if($earnTemp > 0){
+                            $bal_today->earned = $earnTemp;
+                            // $acc->balance = $curBalance;
+                            // $acc->save();
+                        }
+                        else{
+                            $bal_today->earned = 0;
+                            // $acc->balance = 0;
+                            // $acc->save();
+                        }
+
+                    }
+                    else{
+                        $bal_today->earned = $curBalance;
+                        // $acc->balance = $curBalance;
+                        // $acc->save();
+                    }
+                    $bal_today->balance = $curBalance;
+                    $bal_today->save();
                 } else{
-                    if($bal_yesterday)
-                        $bal_today->earned = $curBalance - $bal_yesterday->balance;
+                    if($bal_yesterday){
+                        $earnTemp = $curBalance - $bal_today->balance;
+                        if($earnTemp > 0){
+                            $bal_today->earned += $earnTemp;
+                            // $acc->balance = $curBalance;
+                            // $acc->save();
+                        }
+                        else{
+                            // $diff = 
+                            // $bal_today->earned += $curBalance;
+                        } 
+                    }
                     else
                         $bal_today->earned = $curBalance;
                     $bal_today->balance = $curBalance;

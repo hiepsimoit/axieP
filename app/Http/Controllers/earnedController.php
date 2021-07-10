@@ -20,6 +20,7 @@ use App\account;
 class earnedController extends Controller
 {
     public function getSLPearnedPerDay(Request $request){
+        // dd(account::get());
         // echo date(strtotime('+30 days'));die;
         // echo $request->choose_month.'<br>'; 
         // echo date('m/Y');
