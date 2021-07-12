@@ -93,7 +93,7 @@ class getSlpEarned extends Command
                     $bal_today->day = date("d");
                     if($bal_yesterday){
                         $earnTemp = $curBalance - $bal_yesterday->balance;
-                        if($earnTemp > 0){
+                        if($earnTemp >= 0){
                             $bal_today->earned = $earnTemp;
                             // $acc->balance = $curBalance;
                             // $acc->save();
@@ -114,15 +114,17 @@ class getSlpEarned extends Command
                     $bal_today->save();
                 } else{
                     if($bal_yesterday){
+                        // if($bal_today->acc_id == 7)
+                        //     dd($bal_today);die;
                         $earnTemp = $curBalance - $bal_today->balance;
-                        if($earnTemp > 0){
+                        if($earnTemp >= 0){
                             $bal_today->earned += $earnTemp;
                             // $acc->balance = $curBalance;
                             // $acc->save();
                         }
                         else{
                             // $diff = 
-                            // $bal_today->earned += $curBalance;
+                            $bal_today->earned += $curBalance;
                         } 
                     }
                     else
