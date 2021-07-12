@@ -47,8 +47,8 @@ class StaffController extends Controller
 
         $this->validate($request, [
             'name' => "required|max:255",
-            'bank_acc' => "required|max:255",
-            'bank_name' => "required|max:255",
+            'bank_acc' => "max:255",
+            'bank_name' => "max:255",
             'salary' => "required|max:255",
         ], [
                 'name.required' => 'Bạn phải nhập tên',
@@ -97,13 +97,11 @@ class StaffController extends Controller
         if ($data->investor_id == $user->id) {
             $this->validate($request, [
                 'name' => "required|max:255",
-                'bank_acc' => "required|max:255",
-                'bank_name' => "required|max:255",
+                'bank_acc' => "max:255",
+                'bank_name' => "max:255",
                 'salary' => "required|max:255",
             ], [
                     'name.required' => 'Bạn phải nhập tên',
-                    'bank_acc.required' => 'Bạn phải nhập số tài khoản',
-                    'bank_name.required' => 'Bạn phải nhập ngân hàng',
                     'salary.required' => 'Bạn phải nhập lương',
                     'salary.max' => 'Lương tối đa 255 kí tự',
                     'bank_name.max' => 'Ngân hàng tối đa 255 kí tự',
