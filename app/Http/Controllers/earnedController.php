@@ -15,6 +15,12 @@ use App\balance_eod;
 use App\investor;
 use App\account;
 
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Auth\Events\Registered;
+
 
 
 class earnedController extends Controller
@@ -205,7 +211,7 @@ class earnedController extends Controller
 
 
         
-        // dd($table);die;
+        // dd($table);
 
         return view('earned',[
             'accs'=>$accounts,
@@ -234,6 +240,7 @@ class earnedController extends Controller
         foreach ($accounts as $acc) {
             $address = str_replace('ronin:','0x',$acc->ronin);
             $url = "https://lunacia.skymavis.com/game-api/clients/".$address."/items/1";
+            // echo $url;die;
             $options = array(
                 CURLOPT_RETURNTRANSFER => true,     // return web page
                 CURLOPT_HEADER         => false,    // don't return headers
@@ -261,7 +268,27 @@ class earnedController extends Controller
             // dd($header);
             $res = json_decode($header['content']);
             if($res){
+                $acc_id = $acc->id;
                 $curBalance = intval($res->total);
+                // $totalSLP += $curBalance;
+                $claimable = intval($res->claimable_total);
+                $last_claimed = $res->last_claimed_item_at;
+                $acc->claimable = $claimable;
+                $acc->total = $curBalance;
+                $acc->last_claimed = $last_claimed;
+                
+                $now = time(); // or your date as well
+                $datediff = $now - $last_claimed;
+                $datediff = round($datediff / (60 * 60 * 24));
+                if($datediff != 0)
+                    $everage = round(($curBalance - $claimable) / $datediff);
+                else
+                    $everage = 0;
+                $acc->everage = $everage;
+                $acc->save();
+
+                
+                // $curBalance = intval($res->total);
                 $day_yesterday = date('d',strtotime("-1 days"));
                 $month_yesterday = date('Ym',strtotime("-1 days"));
                 $bal_yesterday = balance_eod::where('acc_id', $acc->id)->where('month_id', $month_yesterday)->where('day', $day_yesterday)->first();
@@ -331,5 +358,90 @@ class earnedController extends Controller
         else
             DB::table('logs')->insert(['action'=>date('Y-m-d H:i:s').' - Get SLP - DONE!']);
         
+    }
+
+    public function getServerStatus(){
+        set_time_limit(0);
+
+        $url = "https://axie.zone:3000/server_status";
+        $options = array(
+            CURLOPT_RETURNTRANSFER => true,     // return web page
+            CURLOPT_HEADER         => false,    // don't return headers
+            CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+            CURLOPT_ENCODING       => "",       // handle all encodings
+            CURLOPT_USERAGENT      => "spider", // who am i
+            CURLOPT_AUTOREFERER    => true,     // set referer on redirect
+            CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
+            CURLOPT_TIMEOUT        => 120,      // timeout on response
+            CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+            CURLOPT_SSL_VERIFYPEER => false     // Disabled SSL Cert checks
+        );
+
+        $ch      = curl_init( $url );
+        curl_setopt_array( $ch, $options );
+        $content = curl_exec( $ch );
+        $err     = curl_errno( $ch );
+        $errmsg  = curl_error( $ch );
+        $header  = curl_getinfo( $ch );
+        curl_close( $ch );
+
+        $header['errno']   = $err;
+        $header['errmsg']  = $errmsg;
+        $header['content'] = $content;
+        // dd($header);
+        $res = json_decode($header['content']);
+        if($res){
+            $lastStatus = DB::table('server_status')->max('id');
+            if($lastStatus){
+                if($lastStatus->status <= 0)
+                    $lastStatusIsOK = 0;
+                else
+                    $lastStatusIsOK = 1;
+
+                $isOK = 0;
+                // $isChange = 0;
+                // dd($res);
+                // echo 1;
+                // echo $res->status_battles;die;
+                if(intval($res->status_battles) <= 0){
+                    $isOK = 0;
+                    if($isOK != $lastStatusIsOK){
+                        // $link  = url('register/confirm/'.$encrypted);
+                        Mail::send([], [], function ($message) {
+                            $message->to('quangtung1412@gmail.com')
+                           //   $message->to('daotung253@gmail.com')
+                            ->from('quangtung1412@gmail.com', 'Phạm Quang Tùng')
+                            ->subject('Axie Battle Status' )
+                            ->setBody('Server đang down! Không chơi được đâu!');
+                        });
+                        // echo 'Đã gửi mail: '.$res->status_battles;die;
+                    }
+                    
+                }
+                else{
+                    $isOK = 1;
+                    // $link  = url('register/confirm/'.$encrypted);
+                    if($isOK != $lastStatusIsOK){
+                        Mail::send([], [], function ($message) {
+                            $message->to('quangtung1412@gmail.com')
+                           //   $message->to('daotung253@gmail.com')
+                            ->from('quangtung1412@gmail.com', 'Phạm Quang Tùng')
+                            ->subject('Axie Battle Status' )
+                            ->setBody('Server đang ngon vào cày đi!');
+                        });
+                    }
+                    // echo 'Đã gửi mail: '.$res->status_battles;die;
+                }
+            }
+
+            else{
+                if(intval($res->status_battles) <= 0)
+                    $isOK = 0;
+                else 
+                    $isOK = 1;
+                DB::table('server_status')->insert(['status'=>$isOK]);
+            }
+
+        }
     }
 }

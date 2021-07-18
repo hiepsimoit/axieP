@@ -60,8 +60,8 @@ class getSlpEarned extends Command
                 CURLOPT_ENCODING       => "",       // handle all encodings
                 CURLOPT_USERAGENT      => "spider", // who am i
                 CURLOPT_AUTOREFERER    => true,     // set referer on redirect
-                CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
-                CURLOPT_TIMEOUT        => 120,      // timeout on response
+                CURLOPT_CONNECTTIMEOUT => 30,      // timeout on connect
+                CURLOPT_TIMEOUT        => 30,      // timeout on response
                 CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
                 CURLOPT_SSL_VERIFYPEER => false     // Disabled SSL Cert checks
             );
@@ -80,7 +80,26 @@ class getSlpEarned extends Command
             // dd($header);
             $res = json_decode($header['content']);
             if($res){
+                $acc_id = $acc->id;
                 $curBalance = intval($res->total);
+                // $totalSLP += $curBalance;
+                $claimable = intval($res->claimable_total);
+                $last_claimed = $res->last_claimed_item_at;
+                $acc->claimable = $claimable;
+                $acc->total = $curBalance;
+                $acc->last_claimed = $last_claimed;
+                
+                $now = time(); // or your date as well
+                $datediff = $now - $last_claimed;
+                $datediff = round($datediff / (60 * 60 * 24));
+                if($datediff != 0)
+                    $everage = round(($curBalance - $claimable) / $datediff);
+                else
+                    $everage = 0;
+                $acc->everage = $everage;
+                $acc->save();
+
+                // $curBalance = intval($res->total);
                 $day_yesterday = date('d',strtotime("-1 days"));
                 $month_yesterday = date('Ym',strtotime("-1 days"));
                 $bal_yesterday = balance_eod::where('acc_id', $acc->id)->where('month_id', $month_yesterday)->where('day', $day_yesterday)->first();

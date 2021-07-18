@@ -32,6 +32,13 @@
 
         <div class="row">
             <div class="col-md-9">
+                <label> PKI </label>
+                <input type="text" class="form-control" maxlength="45"  name="pki" value="{{ $data->pki }}">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-9">
                 <label>claimable </label>
                 <input type="text" disabled class="form-control" maxlength="45"  name="" value="{{ $data->claimable }}">
             </div>

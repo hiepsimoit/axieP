@@ -5,6 +5,7 @@ use App\staff;
 use Illuminate\Http\Request;
 use DB;
 use App\account;
+use App\rewards;
 use Illuminate\Support\Facades\Auth;
 use DomDocument;
 // use DOMNodeListIterator;
@@ -60,6 +61,7 @@ class AccountController extends Controller
         $new->ronin = $request->ronin;
         $new->staff_id = $request->staff_id;
         $new->acc_name = $request->acc_name;
+        $new->pki = $request->pki;
         $user = Auth::user();
         $new->investor_id = $user->id;
         $new->status = 1;
@@ -100,6 +102,7 @@ class AccountController extends Controller
             $new->ronin = $request->ronin;
             $new->staff_id = $request->staff_id;
             $new->acc_name = $request->acc_name;
+            $new->pki = $request->pki;
             $user = Auth::user();
             $new->investor_id = $user->id;
             $new->save();
@@ -131,7 +134,7 @@ class AccountController extends Controller
         set_time_limit(0);
         
         $accs = account::join('staffs', 'staffs.id', '=', 'accounts.staff_id')
-        ->select('staffs.name as staff_name', 'accounts.acc_name', 'accounts.ronin', 'accounts.id as acc_id')
+        ->select('staffs.name as staff_name', 'accounts.*')
         ->where('accounts.investor_id', Auth::user()->id)
         ->where('accounts.status', 1)
         ->get();
@@ -141,47 +144,48 @@ class AccountController extends Controller
         foreach ($accs as $acc) {
             $info = [];
 
-            $address = str_replace('ronin:', '0x', $acc->ronin);
-            $url = "https://lunacia.skymavis.com/game-api/clients/".$address."/items/1";
+            // $address = str_replace('ronin:', '0x', $acc->ronin);
+            // $url = "https://lunacia.skymavis.com/game-api/clients/".$address."/items/1";
 
-            $options = array(
-                CURLOPT_RETURNTRANSFER => true,     // return web page
-                CURLOPT_HEADER         => false,    // don't return headers
-                CURLOPT_FOLLOWLOCATION => true,     // follow redirects
-                CURLOPT_ENCODING       => "",       // handle all encodings
-                CURLOPT_USERAGENT      => "spider", // who am i
-                CURLOPT_AUTOREFERER    => true,     // set referer on redirect
-                CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
-                CURLOPT_TIMEOUT        => 120,      // timeout on response
-                CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
-                CURLOPT_SSL_VERIFYPEER => false     // Disabled SSL Cert checks
-            );
+            // $options = array(
+            //     CURLOPT_RETURNTRANSFER => true,     // return web page
+            //     CURLOPT_HEADER         => false,    // don't return headers
+            //     CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+            //     CURLOPT_ENCODING       => "",       // handle all encodings
+            //     CURLOPT_USERAGENT      => "spider", // who am i
+            //     CURLOPT_AUTOREFERER    => true,     // set referer on redirect
+            //     CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
+            //     CURLOPT_TIMEOUT        => 120,      // timeout on response
+            //     CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+            //     CURLOPT_SSL_VERIFYPEER => false     // Disabled SSL Cert checks
+            // );
 
-            $ch      = curl_init( $url );
-            curl_setopt_array( $ch, $options );
-            $content = curl_exec( $ch );
-            $err     = curl_errno( $ch );
-            $errmsg  = curl_error( $ch );
-            $header  = curl_getinfo( $ch );
-            curl_close( $ch );
+            // $ch      = curl_init( $url );
+            // curl_setopt_array( $ch, $options );
+            // $content = curl_exec( $ch );
+            // $err     = curl_errno( $ch );
+            // $errmsg  = curl_error( $ch );
+            // $header  = curl_getinfo( $ch );
+            // curl_close( $ch );
 
-            $header['errno']   = $err;
-            $header['errmsg']  = $errmsg;
-            $header['content'] = $content;
-            // dd($header);
-            $res = json_decode($header['content']);
-            if($res){
+            // $header['errno']   = $err;
+            // $header['errmsg']  = $errmsg;
+            // $header['content'] = $content;
+            // // dd($header);
+            // $res = json_decode($header['content']);
+            // if($res){
                 // die;
                 // dd($res);die;
-                $acc_id = $acc->id;
-                $curBalance = intval($res->total);
-                $totalSLP += $curBalance;
-                $claimable = intval($res->claimable_total);
-                $last_claimed = $res->last_claimed_item_at;
-                $acc->claimable = $claimable;
-                $acc->total = $curBalance;
-                $acc->last_claimed = $last_claimed;
-                $acc->save();
+                // $acc_id = $acc->acc_id;
+                // $tAcc = account::find($acc_id);
+                // // dd($tAcc);
+                // $curBalance = intval($res->total);
+                // $totalSLP += $curBalance;
+                // $claimable = intval($res->claimable_total);
+                // $last_claimed = $res->last_claimed_item_at;
+                // $tAcc->claimable = $claimable;
+                // $tAcc->total = $curBalance;
+                // $tAcc->last_claimed = $last_claimed;
 
                 // echo $last_claimed;die;
                 // echo date('Y-m-d H:i', $last_claimed);die;
@@ -190,49 +194,56 @@ class AccountController extends Controller
                 $info[] = $acc->acc_name;
 
                 $now = time(); // or your date as well
-                $datediff = $now - $last_claimed;
+                $datediff = $acc->total - $acc->last_claimed;
                 $datediff = round($datediff / (60 * 60 * 24));
                 if($datediff != 0)
-                    $everage = round(($curBalance - $claimable) / $datediff);
+                    $everage = round(($acc->total - $acc->claimable) / $datediff);
                 else
-                    $everage = "N/A";
-                $info[] = $everage;
+                    $everage = 0;
+                // $tAcc->everage = $everage;
+                // $tAcc->save();
 
-                $info[] = $claimable;
-                $info[] = $curBalance - $claimable;
-                $info[] = $curBalance;
-                $info[] = date('H:i d/m/Y', $last_claimed);
-                $info[] = date('H:i d/m/Y', $last_claimed + 60 * 60 * 24 * 15);
+                // echo 1;die;
+                $info[] = $acc->everage;
+                $info[] = $acc->claimable;
+                $info[] = $acc->total - $acc->claimable;
+                $info[] = $acc->total;
+                $info[] = date('H:i d/m/Y', $acc->last_claimed);
+                $info[] = date('H:i d/m/Y', $acc->last_claimed + 60 * 60 * 24 * 15);
 
                 // $info[] = $acc->staff_name;
-                $url = 'https://axie.zone/leaderboard?ron_addr='.$address;
-                $ch      = curl_init( $url );
-                curl_setopt_array( $ch, $options );
-                $content = curl_exec( $ch );
-                $err     = curl_errno( $ch );
-                $errmsg  = curl_error( $ch );
-                $header  = curl_getinfo( $ch );
-                curl_close( $ch );
+                // $url = 'https://axie.zone/leaderboard?ron_addr='.$address;
+                // $ch      = curl_init( $url );
+                // curl_setopt_array( $ch, $options );
+                // $content = curl_exec( $ch );
+                // $err     = curl_errno( $ch );
+                // $errmsg  = curl_error( $ch );
+                // $header  = curl_getinfo( $ch );
+                // curl_close( $ch );
 
-                $dom = new DomDocument();
-                libxml_use_internal_errors(true);
-                $dom->loadHTML($content);
-                libxml_use_internal_errors(false);
-                $highlighted = $dom->getElementsByTagName('td');
-                $info[] = $highlighted[3]->textContent;
-                $info[] = $last_claimed + 60 * 60 * 24 * 15;
+                // $dom = new DomDocument();
+                // libxml_use_internal_errors(true);
+                // $dom->loadHTML($content);
+                // libxml_use_internal_errors(false);
+                // $highlighted = $dom->getElementsByTagName('td');
+                // if(isset($highlighted[3]))
+                //     $info[] = $highlighted[3]->textContent;
+                // else
+                    $info[] = "";
+                $info[] = $acc->last_claimed + 60 * 60 * 24 * 15;
                 // $info[] = $acc->acc_id;
                 // echo $acc->acc_id;die;
                 $table[] = $info;
-            }else{
-                $earned[] = "ERROR";
-                // $sum[$acc_index] += 0;
-                // $sumVertical += 0;
-            }
+            // }else{
+            //     $earned[] = "ERROR";
+            //     // $sum[$acc_index] += 0;
+            //     // $sumVertical += 0;
+            // }
         }
 
         return view('account.acc_info', ['table'=>$table, 'totalSLP'=>$totalSLP]);
     }
 
     
+
 }

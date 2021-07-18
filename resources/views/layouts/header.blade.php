@@ -22,7 +22,8 @@
                     <li class="nav-item"><a class="{{ (request()->is('staff')) ? 'active' : '' }}" href="{{ url("staff") }}">Scholarships</a></li>
                     <li class="nav-item"><a  class="{{ (request()->is('account')) ? 'active' : '' }}" href="{{ url("account") }}">Accounts</a></li>
                     <li class="nav-item"><a class="{{ (request()->is('earnedPerDay')) ? 'active' : '' }}" href="{{ url("earnedPerDay") }}">SLP hàng ngày</a></li>
-                    <li class="nav-item"><a class="{{ (request()->is('earnedPerDay')) ? 'active' : '' }}" href="{{ url("accsInfo") }}">Thông tin các acc</a></li>
+                    <li class="nav-item"><a class="{{ (request()->is('accsInfo')) ? 'active' : '' }}" href="{{ url("accsInfo") }}">Thông tin các acc</a></li>
+                    <li class="nav-item"><a class="{{ (request()->is('rewards')) ? 'active' : '' }}" href="{{ url("rewards") }}">Lương</a></li>
                     <li class="nav-item"><a class="{{ (request()->is('buy_package/add')) ? 'active' : '' }}" href="{{ url("buy_package/add") }}">BUY</a></li>
                     <li class="nav-item"><a  class="{{ (request()->is('buy_package')) ? 'active' : '' }}" href="{{ url("buy_package") }}">QL gói </a></li>
 
