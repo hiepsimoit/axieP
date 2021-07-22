@@ -209,8 +209,8 @@ class AccountController extends Controller
                 $info[] = $acc->total - $acc->claimable;
                 $info[] = $acc->total;
                 $info[] = date('H:i d/m/Y', $acc->last_claimed);
-                $info[] = date('H:i d/m/Y', $acc->last_claimed + 60 * 60 * 24 * 15);
-
+                $info[] = $acc->last_claimed + 60 * 60 * 24 * 14;
+                // echo $info[7];die;
                 // $info[] = $acc->staff_name;
                 // $url = 'https://axie.zone/leaderboard?ron_addr='.$address;
                 // $ch      = curl_init( $url );

@@ -27,7 +27,7 @@
 	<tbody>
 		<?php $i=1; ?>
 		@foreach ($table as $key => $value)
-			<tr style="background-color: <?php if ($value[9] < strtotime('now')) echo '#baf5ca'; ?>" >
+			<tr style="background-color: <?php if ($value[7] < strtotime('now')) echo '#baf5ca'; ?>" >
 				<td>
 					<?php echo $i;$i++; ?>
 				</td>
@@ -38,7 +38,7 @@
 				<td>{{$value[4]}}</td>
 				<td>{{$value[5]}}</td>
 				<td>{{$value[6]}}</td>
-				<td>{{$value[7]}}</td>
+				<td>{{date('H:i d/m/Y',$value[7])}}</td>
 				<td>{{$value[8]}}</td>
 
 			</tr>

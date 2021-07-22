@@ -233,104 +233,104 @@ class earnedController extends Controller
     // }
 
     public function getSlpEndOfDay(){
-        // echo 1; die;
         set_time_limit(0);
+
         $accounts = account::get();
         $isError = 0;
         foreach ($accounts as $acc) {
             $address = str_replace('ronin:','0x',$acc->ronin);
-            $url = "https://lunacia.skymavis.com/game-api/clients/".$address."/items/1";
-            // echo $url;die;
-            $options = array(
-                CURLOPT_RETURNTRANSFER => true,     // return web page
-                CURLOPT_HEADER         => false,    // don't return headers
-                CURLOPT_FOLLOWLOCATION => true,     // follow redirects
-                CURLOPT_ENCODING       => "",       // handle all encodings
-                CURLOPT_USERAGENT      => "spider", // who am i
-                CURLOPT_AUTOREFERER    => true,     // set referer on redirect
-                CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
-                CURLOPT_TIMEOUT        => 120,      // timeout on response
-                CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
-                CURLOPT_SSL_VERIFYPEER => false     // Disabled SSL Cert checks
-            );
 
-            $ch      = curl_init( $url );
-            curl_setopt_array( $ch, $options );
-            $content = curl_exec( $ch );
-            $err     = curl_errno( $ch );
-            $errmsg  = curl_error( $ch );
-            $header  = curl_getinfo( $ch );
-            curl_close( $ch );
+            $day_yesterday = date('d',strtotime("-1 days"));
+            $month_yesterday = date('Ym',strtotime("-1 days"));
+            $day_yesyesterday = date('d',strtotime("-2 days"));
+            $month_yesyesterday = date('Ym',strtotime("-2 days"));
+            $bal_yesterday = balance_eod::where('acc_id', $acc->id)->where('month_id', $month_yesterday)->where('day', $day_yesterday)->first();
+            $bal_yesyesterday = balance_eod::where('acc_id', $acc->id)->where('month_id', $month_yesyesterday)->where('day', $day_yesyesterday)->first();
+            $bal_today = balance_eod::where('acc_id', $acc->id)->where('month_id', date('Ym'))->where('day', date('d'))->first();
 
-            $header['errno']   = $err;
-            $header['errmsg']  = $errmsg;
-            $header['content'] = $content;
-            // dd($header);
-            $res = json_decode($header['content']);
-            if($res){
-                $acc_id = $acc->id;
-                $curBalance = intval($res->total);
-                // $totalSLP += $curBalance;
-                $claimable = intval($res->claimable_total);
-                $last_claimed = $res->last_claimed_item_at;
-                $acc->claimable = $claimable;
-                $acc->total = $curBalance;
-                $acc->last_claimed = $last_claimed;
+            if(!$bal_today){
+                $bal_today = new balance_eod();
+                $bal_today->investor_id = $acc->investor_id;
+                $bal_today->acc_id = $acc->id;
+                $bal_today->month_id = date("Ym");
+                $bal_today->day = date("d");
                 
-                $now = time(); // or your date as well
-                $datediff = $now - $last_claimed;
-                $datediff = round($datediff / (60 * 60 * 24));
-                if($datediff != 0)
-                    $everage = round(($curBalance - $claimable) / $datediff);
-                else
-                    $everage = 0;
-                $acc->everage = $everage;
-                $acc->save();
-
-                
-                // $curBalance = intval($res->total);
-                $day_yesterday = date('d',strtotime("-1 days"));
-                $month_yesterday = date('Ym',strtotime("-1 days"));
-                $bal_yesterday = balance_eod::where('acc_id', $acc->id)->where('month_id', $month_yesterday)->where('day', $day_yesterday)->first();
-                $bal_today = balance_eod::where('acc_id', $acc->id)->where('month_id', date('Ym'))->where('day', date('d'))->first();
-                if(!$bal_today){
-                    // echo 1; die;
-                    $bal_today = new balance_eod();
-                    $bal_today->investor_id = $acc->investor_id;
-                    $bal_today->acc_id = $acc->id;
-                    $bal_today->month_id = date("Ym");
-                    $bal_today->day = date("d");
-                    if($bal_yesterday){
-                        $earnTemp = $curBalance - $bal_yesterday->balance;
-                        if($earnTemp >= 0){
-                            $bal_today->earned = $earnTemp;
-                            // $acc->balance = $curBalance;
-                            // $acc->save();
-                        }
-                        else{
-                            $bal_today->earned = 0;
-                            // $acc->balance = 0;
-                            // $acc->save();
-                        }
-
+                if(!$bal_yesterday){
+                    // $bal_today->earned = $curBalance;
+                    $bal_yesterday = new balance_eod();
+                    $bal_yesterday->investor_id = $acc->investor_id;
+                    $bal_yesterday->acc_id = $acc->id;
+                    $bal_yesterday->month_id = date("Ym", strtotime("-1 days"));
+                    $bal_yesterday->day = date("d", strtotime("-1 days"));
+                    $bal_yesterday->earned = 0;
+                    if($bal_yesyesterday){
+                        $bal_yesterday->balance = $bal_yesyesterday->balance;
                     }
                     else{
-                        $bal_today->earned = $curBalance;
-                        // $acc->balance = $curBalance;
-                        // $acc->save();
+                        $bal_yesterday->balance = 0;
                     }
-                    $bal_today->balance = $curBalance;
-                    $bal_today->save();
-                } else{
-                    // echo 2; die;
+
+                    $bal_yesterday->save();
+                }
+                $bal_today->balance = $bal_yesterday->balance;
+                $bal_today->earned = 0;
+                $bal_today->save();
+                // echo 1;die;
+            } 
+            else{ //ĐÃ tồn tại dữ liệu ngày hôm nay
+                $url = "https://game-api.skymavis.com/game-api/clients/".$address."/items/1";
+                $options = array(
+                    CURLOPT_RETURNTRANSFER => true,     // return web page
+                    CURLOPT_HEADER         => false,    // don't return headers
+                    CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+                    CURLOPT_ENCODING       => "",       // handle all encodings
+                    CURLOPT_USERAGENT      => "spider", // who am i
+                    CURLOPT_AUTOREFERER    => true,     // set referer on redirect
+                    CURLOPT_CONNECTTIMEOUT => 30,      // timeout on connect
+                    CURLOPT_TIMEOUT        => 30,      // timeout on response
+                    CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+                    CURLOPT_SSL_VERIFYPEER => false     // Disabled SSL Cert checks
+                );
+
+                $ch      = curl_init( $url );
+                curl_setopt_array( $ch, $options );
+                $content = curl_exec( $ch );
+                $err     = curl_errno( $ch );
+                $errmsg  = curl_error( $ch );
+                $header  = curl_getinfo( $ch );
+                curl_close( $ch );
+
+                $header['errno']   = $err;
+                $header['errmsg']  = $errmsg;
+                $header['content'] = $content;
+                // dd($header);
+                $res = json_decode($header['content']);
+
+                if($res){
+                    $acc_id = $acc->id;
+                    $curBalance = intval($res->total);
+                    // $totalSLP += $curBalance;
+                    $claimable = intval($res->claimable_total);
+                    $last_claimed = $res->last_claimed_item_at;
+                    $acc->claimable = $claimable;
+                    $acc->total = $curBalance;
+                    $acc->last_claimed = $last_claimed;
+                    
+                    $now = time(); // or your date as well
+                    $datediff = $now - $last_claimed;
+                    $datediff = round($datediff / (60 * 60 * 24));
+                    if($datediff != 0)
+                        $everage = round(($curBalance - $claimable) / $datediff);
+                    else
+                        $everage = 0;
+                    $acc->everage = $everage;
+                    $acc->save();
+
+                    // $curBalance = intval($res->total);
+                    
                     if($bal_yesterday){
-                        // echo $bal_today->acc_id."<br>";
                         // if($bal_today->acc_id == 7)
-                        // {
-                        //     // echo 1; die;
-                        //     // dd($bal_today);
-                        //     // echo $curBalance.'   '.$bal_today->balance.'   '. ($curBalance - $bal_today->balance); die;
-                        // }
+                        //     dd($bal_today);die;
                         $earnTemp = $curBalance - $bal_today->balance;
                         if($earnTemp >= 0){
                             $bal_today->earned += $earnTemp;
@@ -339,7 +339,8 @@ class earnedController extends Controller
                         }
                         else{
                             // $diff = 
-                            $bal_today->earned = $curBalance;
+                            if($curBalance < 200)
+                                $bal_today->earned += $curBalance;
                         } 
                     }
                     else
@@ -347,17 +348,16 @@ class earnedController extends Controller
                     $bal_today->balance = $curBalance;
                     $bal_today->save();
                 }
+                else{
+                    $isError = 1;
+                }
             }
-            else{
-                $isError = 1;
-            }
+            
         }
-        die;
         if($isError)
             DB::table('logs')->insert(['action'=>date('Y-m-d H:i:s').' - Get SLP - ERROR!']);
         else
             DB::table('logs')->insert(['action'=>date('Y-m-d H:i:s').' - Get SLP - DONE!']);
-        
     }
 
     public function getServerStatus(){
