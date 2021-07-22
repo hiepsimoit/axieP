@@ -45,7 +45,7 @@
 	<tbody>
 		<?php $totalPayable = 0;?>
 		@foreach($staffs as $staff)
-			<?php $totalSalary = 0; ?>
+			<?php $totalSalary = 0; $totalReward = 0;?>
 			<tr style="background-color: #8cd9ff;">
 				<td rowspan="1" colspan="1">
 					{{$staff->name}}
@@ -63,18 +63,19 @@
 					<td>{{$acc->everage}}</td>
 					<td>{{number_format($staff->salary)}}</td>
 					<td id="total_reward_{{$acc->id}}">
-						<?php $totalReward = 0; ?>
+						<?php $reward = 0; ?>
 						@foreach($rewards as $rw)
 						@if($rw->acc_id == $acc->id)
 							<?php 
 							if($rw->type == 1)
-								$totalReward += $rw->value; 
+								$reward += $rw->value; 
 							else
-								$totalReward -= $rw->value; 
+								$reward -= $rw->value; 
 							?>
 						@endif
 						@endforeach
-						{{number_format($totalReward)}}
+						{{number_format($reward)}}
+						<?php $totalReward += $reward; ?>
 					</td>
 					<td>
 						<input type="text" name="text_reward_{{$acc->id}}" id="text_reward_{{$acc->id}}" class="form-control" onkeyup="FormatNumber(this)">

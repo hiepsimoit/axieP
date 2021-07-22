@@ -165,10 +165,11 @@ class getSlpEarned extends Command
                     $isError = 1;
                 }
             }
-            if($isError)
-                DB::table('logs')->insert(['action'=>date('Y-m-d H:i:s').' - Get SLP - ERROR!']);
-            else
-                DB::table('logs')->insert(['action'=>date('Y-m-d H:i:s').' - Get SLP - DONE!']);
+            
         }
+        if($isError)
+            DB::table('logs')->insert(['action'=>date('Y-m-d H:i:s').' - Get SLP - ERROR!']);
+        else
+            DB::table('logs')->insert(['action'=>date('Y-m-d H:i:s').' - Get SLP - DONE!']);
     }
 }

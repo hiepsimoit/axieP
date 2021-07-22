@@ -19,6 +19,10 @@
 </form>
 <div id="result">
 	<table class="table table-list table-condensed table-bordered table-hover tableLoa">
+		<!-- <col width="50px">
+		@foreach ($table as $key => $value)
+		<col width="80px">
+		@endforeach -->
 		<thead>
 			<tr style="">
 				<th>Ngày</th>
@@ -31,7 +35,7 @@
 		<tbody>
 			@foreach ($table as $key => $value)
 				<tr style="@if($key == 'Tổng') background-color:rgb(81, 104, 168); @endif">
-					<td style="background-color:rgb(81, 104, 168); color: #fff;">
+					<td style="background-color:rgb(81, 104, 168); color: #fff; text-align: center;">
 						{{$key}}
 					</td>
 					<?php $i=0; ?>

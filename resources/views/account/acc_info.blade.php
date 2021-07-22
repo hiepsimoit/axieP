@@ -4,7 +4,17 @@
 @section('content')
 
 <table class="table select_table my-table table-bordered">
-	<!-- <col width="50px"> -->
+	<col width="50px">
+	<col width="100px">
+	<col width="100px">
+	<col width="100px">
+	<col width="100px">
+	<col width="100px">
+	<col width="100px">
+	<col width="100px">
+	<col width="100px">
+	<col width="100px">
+	<col width="50px">
 	
 	<thead>
 		<tr style="">
@@ -25,10 +35,10 @@
 		</tr>
 	</thead>
 	<tbody>
-		<?php $i=1; ?>
+		<?php $i=1; $totalSLP = 0;?>
 		@foreach ($table as $key => $value)
 			<tr style="background-color: <?php if ($value[7] < strtotime('now')) echo '#baf5ca'; ?>" >
-				<td>
+				<td style="background-color: rgb(81, 104, 168); color: white; font-weight: bold; text-align: center;">
 					<?php echo $i;$i++; ?>
 				</td>
 				<td>{{$value[0]}}</td>
@@ -42,8 +52,14 @@
 				<td>{{$value[8]}}</td>
 
 			</tr>
+			<?php $totalSLP += $value[5]; ?>
 		@endforeach
-
+		<tr style="background-color: rgb(81, 104, 168);  text-align: center;">
+			<td></td>
+			<td colspan="10" style="color: white; font-weight: bold;">
+				Tổng SLP hiện có: {{number_format($totalSLP)}}
+			</td>
+		</tr>
 	</tbody>
 </table>
 
