@@ -41,7 +41,7 @@
 					<?php $i=0; ?>
 					@foreach($value as $data)
 
-					<td style="background-color: @if($i < count($value) - 1 && $key != 'Tổng') @if($data == 0) #ff3030 @elseif($data > 0 && $data < 100) #fa8334 @elseif($data >= 100 && $data < $accs[$i]->pki && $accs[$i]->pki > 100) #e8ff69 @elseif($data > $accs[$i]->pki && $accs[$i]->pki > 100) #75ff70 @endif
+					<td style="background-color: @if($i < count($value) - 1 && $key != 'Tổng') @if($data == 0) #ff3030 @elseif($data > 0 && $data < 100) #fa8334 @elseif($data >= 100 && $data < $accs[$i]->kpi && $accs[$i]->kpi > 100) #e8ff69 @elseif($data > $accs[$i]->kpi && $accs[$i]->kpi > 100) #75ff70 @endif
 					@elseif($i == count($value) - 1) rgb(81, 104, 168); color: #fff; @endif; @if($key == 'Tổng') color: #fff; @endif">
 					{{  number_format($data, 0, ',', '.')}}
 					</td>
