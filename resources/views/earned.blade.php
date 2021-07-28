@@ -63,6 +63,7 @@
 					}
 					?>
 					<td class="table-header" style="background-color: rgb(81, 104, 168); color: white;text-align: center;">{{$totalHorizontal}}</td>
+
 				</tr>
 				<?php 
 			} ?>
