@@ -35,9 +35,9 @@
 		</tr>
 	</thead>
 	<tbody>
-		<?php $i=1; $totalSLP = 0;?>
+		<?php $i=1; $totalSLP = 0; $totalClaimable = 0;?>
 		@foreach ($table as $key => $value)
-			<tr style="background-color: <?php if ($value[7] < strtotime('now')) echo '#baf5ca'; ?>" >
+			<tr style="background-color: <?php if ($value[7] < strtotime('now')) {$totalClaimable += $value[5]; echo '#baf5ca';} ?>" >
 				<td style="background-color: rgb(81, 104, 168); color: white; font-weight: bold; text-align: center;">
 					<?php echo $i;$i++; ?>
 				</td>
@@ -57,7 +57,7 @@
 		<tr style="background-color: rgb(81, 104, 168);  text-align: center;">
 			<td></td>
 			<td colspan="10" style="color: white; font-weight: bold;">
-				Tổng SLP hiện có: {{number_format($totalSLP)}}
+				Tổng SLP hiện có: {{number_format($totalSLP)}}<br>Tổng SLP có thể claim: {{number_format($totalClaimable)}}
 			</td>
 		</tr>
 	</tbody>

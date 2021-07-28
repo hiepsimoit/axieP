@@ -147,3 +147,15 @@ a {
 
 .table {
 }
+
+.text-center{
+}
+
+.background-blue {
+}
+
+.table-header {
+    text-align: center;
+    background-color: rgb(81, 104, 168);
+    color: white;
+}

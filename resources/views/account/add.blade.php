@@ -32,8 +32,8 @@
 
         <div class="row form-group">
             <div class="col-md-9">
-                <label> PKI </label>
-                <input type="text" class="form-control" maxlength="45"  name="pki" value="{{ old('pki') }}">
+                <label> KPI </label>
+                <input type="text" class="form-control" maxlength="45"  name="kpi" value="{{ old('kpi') }}">
             </div>
         </div>
 

@@ -61,7 +61,7 @@ class AccountController extends Controller
         $new->ronin = $request->ronin;
         $new->staff_id = $request->staff_id;
         $new->acc_name = $request->acc_name;
-        $new->pki = $request->pki;
+        $new->kpi = $request->kpi;
         $user = Auth::user();
         $new->investor_id = $user->id;
         $new->status = 1;
@@ -102,7 +102,7 @@ class AccountController extends Controller
             $new->ronin = $request->ronin;
             $new->staff_id = $request->staff_id;
             $new->acc_name = $request->acc_name;
-            $new->pki = $request->pki;
+            $new->kpi = $request->kpi;
             $user = Auth::user();
             $new->investor_id = $user->id;
             $new->save();

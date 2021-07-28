@@ -33,23 +33,48 @@
 			</tr>
 		</thead>
 		<tbody>
-			@foreach ($table as $key => $value)
-				<tr style="@if($key == 'Tổng') background-color:rgb(81, 104, 168); @endif">
-					<td style="background-color:rgb(81, 104, 168); color: #fff; text-align: center;">
-						{{$key}}
-					</td>
-					<?php $i=0; ?>
-					@foreach($value as $data)
-
-					<td style="background-color: @if($i < count($value) - 1 && $key != 'Tổng') @if($data == 0) #ff3030 @elseif($data > 0 && $data < 100) #fa8334 @elseif($data >= 100 && $data < $accs[$i]->pki && $accs[$i]->pki > 100) #e8ff69 @elseif($data > $accs[$i]->pki && $accs[$i]->pki > 100) #75ff70 @endif
-					@elseif($i == count($value) - 1) rgb(81, 104, 168); color: #fff; @endif; @if($key == 'Tổng') color: #fff; @endif">
-					{{  number_format($data, 0, ',', '.')}}
-					</td>
-					<?php $i++; ?>
-					@endforeach
+			<?php $accNum = count($accs); $totalVertical = []; $total = 0;?>
+			<?php 
+			for($i=1;$i<$numberDay+1;$i++){?>
+				<tr>
+					<td class="table-header" style="background-color: rgb(81, 104, 168); color: white;text-align: center;">{{$i}}</td>
+					<?php 
+					$totalHorizontal = 0;
+					for($j=0;$j<$accNum;$j++){
+						if(count($totalVertical) < $accNum)
+							$totalVertical[] = 0;
+						$earned = 0;
+						$kpi = 0;
+						foreach($table as $var){
+							
+							if($var->day == $i && $var->acc_id == $accs[$j]->id){
+								$earned = $var->earned;
+								$kpi = $accs[$j]->kpi;
+								$totalVertical[$j] += $earned;
+								$total += $earned;
+							}
+						}
+						?>
+						<td style="background-color: @if($earned == 0) #ff3030 @elseif($earned > 0 && $earned < 100) #fa8334 @elseif($earned >= 100 && $earned < $kpi && $kpi > 100) #e8ff69 @elseif($earned > $kpi && $kpi > 100) #75ff70 @endif; text-align: center;">
+							{{$earned}}
+						</td>
+					<?php 
+					$totalHorizontal += $earned;
+					}
+					?>
+					<td class="table-header" style="background-color: rgb(81, 104, 168); color: white;text-align: center;">{{$totalHorizontal}}</td>
 				</tr>
-			@endforeach
-
+				<?php 
+			} ?>
+			
+			<tr>
+				<td class="table-header" style="background-color: rgb(81, 104, 168); color: white;text-align: center;">Tổng</td>
+				<?php $count = 0; ?>
+				@foreach($accs as $acc)
+				<td class="table-header" style="background-color: rgb(81, 104, 168); color: white;text-align: center;"><?php echo $totalVertical[$count]; $count++; ?></td>
+				@endforeach
+				<td class="table-header" style="background-color: rgb(81, 104, 168); color: white;text-align: center;"><?php echo $total; ?></td>
+			</tr>
 		</tbody>
 	</table>
 </div>

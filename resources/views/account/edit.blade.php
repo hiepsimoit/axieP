@@ -32,8 +32,8 @@
 
         <div class="row">
             <div class="col-md-9">
-                <label> PKI </label>
-                <input type="text" class="form-control" maxlength="45"  name="pki" value="{{ $data->pki }}">
+                <label> KPI </label>
+                <input type="text" class="form-control" maxlength="45"  name="kpi" value="{{ $data->kpi }}">
             </div>
         </div>
 

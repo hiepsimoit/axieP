@@ -62,152 +62,168 @@ class earnedController extends Controller
         else
             $numberDay = 30;
 
-        // $investor = investor::where('link', $request->link)->first();
+        // $accounts = account::select('id')->where('investor_id', Auth::user()->id)->where('status', 1)->get()->toArray();
 
-        // dd($investor);die;
+        // $days = [];
+        // $earnTable = [];
+        // for($i=0;$i<$numberDay;$i++){
+        //     $days[] = $i+1;
+        //     $earnTablePerDay = balance_eod::whereIn('acc_id', $accounts)->where('month_id', $monthFull)->where('day', $i+1)->get()->toArray();
+        //     // dd($earnTablePerDay);
+        //     $earnTable[] = $earnTablePerDay;
+        // }
 
-        // if($investor)
-        //     $investor_id = $investor->id; 
-        // else
-        //     $investor_id = 1;
+
+        // dd($earnTable);
+
+        $days = [];
+        for($i=0;$i<$numberDay;$i++){
+            $days[] = $i+1;
+        }
 
         $accounts = account::where('investor_id', Auth::user()->id)->where('status', 1)->get();
+        $ids = [];
+        foreach($accounts as $acc){
+            $ids[] = $acc->id;
+        }
 
+        $earnTable = balance_eod::whereIn('acc_id', $ids)->where('month_id', $monthFull)->whereIn('day', $days)->get();
+        // dd($earnTable[0]);
         // dd($accounts);
 
-        $table = [];
-        $sum = [];
-        $sumAll = 0;
-        // $sumVertical = [];
-        for($i = 0; $i<count($accounts);$i++){
-            $sum[] = 0;
-        }
-        for($i = 0; $i < $numberDay; $i++){
-            // $sumVertical[] = 0;
-            if($i + 1 != $today){ ///Các ngày khác
-                $earned = [];
-                $acc_index = 0;
-                $sumVertical = 0;
-                foreach ($accounts as $acc) {
-                    $earnPerDay = balance_eod::where('acc_id', $acc->id)->where('month_id', $monthFull)->where('day', $i+1)->first();
-                    if($earnPerDay){
-                        // dd($earnPerDay);die;
-                        $earned[] = $earnPerDay->earned;
-                        $sum[$acc_index] += $earnPerDay->earned;
-                        $sumVertical += $earnPerDay->earned;
-                    }
-                    else{
-                        $earned[] = 0;
-                    }
-                    $acc_index++;
-                }
-                $sumAll += $sumVertical;
-                $earned[] = $sumVertical;
-                $table[$i+1] = $earned;
-            }
-            else if($i+1 == $today && $monthFull == date('Ym')){           //Ngày hôm nay (chưa ghi vào DB)
-                $earned = [];
-                $acc_index = 0;
-                $sumVertical = 0;
-                foreach ($accounts as $acc) {
-                    // $address = str_replace('ronin:', '0x', $acc->ronin);
-                    // $url = "https://lunacia.skymavis.com/game-api/clients/".$address."/items/1";
-                    // $options = array(
-                    //     CURLOPT_RETURNTRANSFER => true,     // return web page
-                    //     CURLOPT_HEADER         => false,    // don't return headers
-                    //     CURLOPT_FOLLOWLOCATION => true,     // follow redirects
-                    //     CURLOPT_ENCODING       => "",       // handle all encodings
-                    //     CURLOPT_USERAGENT      => "spider", // who am i
-                    //     CURLOPT_AUTOREFERER    => true,     // set referer on redirect
-                    //     CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
-                    //     CURLOPT_TIMEOUT        => 120,      // timeout on response
-                    //     CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
-                    //     CURLOPT_SSL_VERIFYPEER => false     // Disabled SSL Cert checks
-                    // );
+        // $table = [];
+        // $sum = [];
+        // $sumAll = 0;
+        // // $sumVertical = [];
+        // for($i = 0; $i<count($accounts);$i++){
+        //     $sum[] = 0;
+        // }
+        // for($i = 0; $i < $numberDay; $i++){
+        //     // $sumVertical[] = 0;
+        //     if($i + 1 != $today){ ///Các ngày khác
+        //         $earned = [];
+        //         $acc_index = 0;
+        //         $sumVertical = 0;
+        //         foreach ($accounts as $acc) {
+        //             $earnPerDay = balance_eod::where('acc_id', $acc->id)->where('month_id', $monthFull)->where('day', $i+1)->first();
+        //             if($earnPerDay){
+        //                 // dd($earnPerDay);die;
+        //                 $earned[] = $earnPerDay->earned;
+        //                 $sum[$acc_index] += $earnPerDay->earned;
+        //                 $sumVertical += $earnPerDay->earned;
+        //             }
+        //             else{
+        //                 $earned[] = 0;
+        //             }
+        //             $acc_index++;
+        //         }
+        //         $sumAll += $sumVertical;
+        //         $earned[] = $sumVertical;
+        //         $table[$i+1] = $earned;
+        //     }
+        //     else if($i+1 == $today && $monthFull == date('Ym')){           //Ngày hôm nay (chưa ghi vào DB)
+        //         $earned = [];
+        //         $acc_index = 0;
+        //         $sumVertical = 0;
+        //         foreach ($accounts as $acc) {
+        //             // $address = str_replace('ronin:', '0x', $acc->ronin);
+        //             // $url = "https://lunacia.skymavis.com/game-api/clients/".$address."/items/1";
+        //             // $options = array(
+        //             //     CURLOPT_RETURNTRANSFER => true,     // return web page
+        //             //     CURLOPT_HEADER         => false,    // don't return headers
+        //             //     CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+        //             //     CURLOPT_ENCODING       => "",       // handle all encodings
+        //             //     CURLOPT_USERAGENT      => "spider", // who am i
+        //             //     CURLOPT_AUTOREFERER    => true,     // set referer on redirect
+        //             //     CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
+        //             //     CURLOPT_TIMEOUT        => 120,      // timeout on response
+        //             //     CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+        //             //     CURLOPT_SSL_VERIFYPEER => false     // Disabled SSL Cert checks
+        //             // );
 
-                    // $ch      = curl_init( $url );
-                    // curl_setopt_array( $ch, $options );
-                    // $content = curl_exec( $ch );
-                    // $err     = curl_errno( $ch );
-                    // $errmsg  = curl_error( $ch );
-                    // $header  = curl_getinfo( $ch );
-                    // curl_close( $ch );
+        //             // $ch      = curl_init( $url );
+        //             // curl_setopt_array( $ch, $options );
+        //             // $content = curl_exec( $ch );
+        //             // $err     = curl_errno( $ch );
+        //             // $errmsg  = curl_error( $ch );
+        //             // $header  = curl_getinfo( $ch );
+        //             // curl_close( $ch );
 
-                    // $header['errno']   = $err;
-                    // $header['errmsg']  = $errmsg;
-                    // $header['content'] = $content;
-                    // // dd($header);
-                    // $res = json_decode($header['content']);
-                    // if($res){
-                    //     // die;
-                    //     // dd($res);die;
-                    //     $curBalance = intval($res->total);
-                    //     $claimable = intval($res->claimable_total);
-                    //     $last_claimed = $res->last_claimed_item_at;
-                    //     $acc->claimable = $claimable;
-                    //     $acc->total = $curBalance;
-                    //     $acc->last_claimed = $last_claimed;
-                    //     $acc->save();
+        //             // $header['errno']   = $err;
+        //             // $header['errmsg']  = $errmsg;
+        //             // $header['content'] = $content;
+        //             // // dd($header);
+        //             // $res = json_decode($header['content']);
+        //             // if($res){
+        //             //     // die;
+        //             //     // dd($res);die;
+        //             //     $curBalance = intval($res->total);
+        //             //     $claimable = intval($res->claimable_total);
+        //             //     $last_claimed = $res->last_claimed_item_at;
+        //             //     $acc->claimable = $claimable;
+        //             //     $acc->total = $curBalance;
+        //             //     $acc->last_claimed = $last_claimed;
+        //             //     $acc->save();
 
-                    //     // echo $curBalance;die;
-                    //     $day_yesterday = date('d',strtotime("-1 days"));
-                    //     $month_yesterday = date('Ym',strtotime("-1 days"));
-                    //     // $bal_yesterday = balance_eod::where('acc_id', $acc->id)->where('month_id', $month_yesterday)->where('day', $day_yesterday)->first();
-                    //     $bal_today = balance_eod::where('acc_id', $acc->id)->where('month_id', date('Ym'))->where('day', date('d'))->first();
-                    //     if($bal_today)
-                    //         $curEarned = $bal_today->earned;
-                    //     else{
-                    //         // if($bal_yesterday){
-                    //         //     $diff_bal = $curBalance - $bal_yesterday->balance;
-                    //         //     if($diff_bal > 0)
-                    //         //         $curEarned = $diff_bal;
-                    //         //     else
-                    //         //         $curEarned = 0;
-                    //         // }
-                    //         // else
-                    //         //     $curEarned = $curBalance;
-                    //         $curEarned = 0;
-                    //     }
+        //             //     // echo $curBalance;die;
+        //             //     $day_yesterday = date('d',strtotime("-1 days"));
+        //             //     $month_yesterday = date('Ym',strtotime("-1 days"));
+        //             //     // $bal_yesterday = balance_eod::where('acc_id', $acc->id)->where('month_id', $month_yesterday)->where('day', $day_yesterday)->first();
+        //             //     $bal_today = balance_eod::where('acc_id', $acc->id)->where('month_id', date('Ym'))->where('day', date('d'))->first();
+        //             //     if($bal_today)
+        //             //         $curEarned = $bal_today->earned;
+        //             //     else{
+        //             //         // if($bal_yesterday){
+        //             //         //     $diff_bal = $curBalance - $bal_yesterday->balance;
+        //             //         //     if($diff_bal > 0)
+        //             //         //         $curEarned = $diff_bal;
+        //             //         //     else
+        //             //         //         $curEarned = 0;
+        //             //         // }
+        //             //         // else
+        //             //         //     $curEarned = $curBalance;
+        //             //         $curEarned = 0;
+        //             //     }
                         
-                    //     $earned[] = $curEarned;
-                    //     $sum[$acc_index] += $curEarned;
-                    //     $sumVertical += $curEarned;
-                    // }else{
-                    //     $earned[] = "ERROR";
-                    //     // $sum[$acc_index] += 0;
-                    //     // $sumVertical += 0;
-                    // }
+        //             //     $earned[] = $curEarned;
+        //             //     $sum[$acc_index] += $curEarned;
+        //             //     $sumVertical += $curEarned;
+        //             // }else{
+        //             //     $earned[] = "ERROR";
+        //             //     // $sum[$acc_index] += 0;
+        //             //     // $sumVertical += 0;
+        //             // }
 
 
 
-                    $bal_today = balance_eod::where('acc_id', $acc->id)->where('month_id', date('Ym'))->where('day', date('d'))->first();
-                    if($bal_today)
-                        $curEarned = $bal_today->earned;
-                    else{
-                        // if($bal_yesterday){
-                        //     $diff_bal = $curBalance - $bal_yesterday->balance;
-                        //     if($diff_bal > 0)
-                        //         $curEarned = $diff_bal;
-                        //     else
-                        //         $curEarned = 0;
-                        // }
-                        // else
-                        //     $curEarned = $curBalance;
-                        $curEarned = 0;
-                    }
+        //             $bal_today = balance_eod::where('acc_id', $acc->id)->where('month_id', date('Ym'))->where('day', date('d'))->first();
+        //             if($bal_today)
+        //                 $curEarned = $bal_today->earned;
+        //             else{
+        //                 // if($bal_yesterday){
+        //                 //     $diff_bal = $curBalance - $bal_yesterday->balance;
+        //                 //     if($diff_bal > 0)
+        //                 //         $curEarned = $diff_bal;
+        //                 //     else
+        //                 //         $curEarned = 0;
+        //                 // }
+        //                 // else
+        //                 //     $curEarned = $curBalance;
+        //                 $curEarned = 0;
+        //             }
                     
-                    $earned[] = $curEarned;
-                    $sum[$acc_index] += $curEarned;
-                    $sumVertical += $curEarned;
-                    $acc_index++;
-                }
-                $sumAll += $sumVertical;
-                $earned[] = $sumVertical;
-                $table[$i+1] = $earned;
-            }
-        }
-        $sum[] = $sumAll;
-        $table['Tổng'] = $sum;
+        //             $earned[] = $curEarned;
+        //             $sum[$acc_index] += $curEarned;
+        //             $sumVertical += $curEarned;
+        //             $acc_index++;
+        //         }
+        //         $sumAll += $sumVertical;
+        //         $earned[] = $sumVertical;
+        //         $table[$i+1] = $earned;
+        //     }
+        // }
+        // $sum[] = $sumAll;
+        // $table['Tổng'] = $sum;
 
 
         
@@ -215,8 +231,9 @@ class earnedController extends Controller
 
         return view('earned',[
             'accs'=>$accounts,
-            'table'=>$table,
+            'table'=>$earnTable,
             // 'link'=>$request->link,
+            'numberDay'=>$numberDay,
             'choose_month'=>$request->choose_month
         ]);
         
