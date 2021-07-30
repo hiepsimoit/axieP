@@ -144,21 +144,21 @@ class AccountController extends Controller
         foreach ($accs as $acc) {
             $info = [];
 
-            // $address = str_replace('ronin:', '0x', $acc->ronin);
+            $address = str_replace('ronin:', '0x', $acc->ronin);
             // $url = "https://lunacia.skymavis.com/game-api/clients/".$address."/items/1";
 
-            // $options = array(
-            //     CURLOPT_RETURNTRANSFER => true,     // return web page
-            //     CURLOPT_HEADER         => false,    // don't return headers
-            //     CURLOPT_FOLLOWLOCATION => true,     // follow redirects
-            //     CURLOPT_ENCODING       => "",       // handle all encodings
-            //     CURLOPT_USERAGENT      => "spider", // who am i
-            //     CURLOPT_AUTOREFERER    => true,     // set referer on redirect
-            //     CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
-            //     CURLOPT_TIMEOUT        => 120,      // timeout on response
-            //     CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
-            //     CURLOPT_SSL_VERIFYPEER => false     // Disabled SSL Cert checks
-            // );
+            $options = array(
+                CURLOPT_RETURNTRANSFER => true,     // return web page
+                CURLOPT_HEADER         => false,    // don't return headers
+                CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+                CURLOPT_ENCODING       => "",       // handle all encodings
+                CURLOPT_USERAGENT      => "spider", // who am i
+                CURLOPT_AUTOREFERER    => true,     // set referer on redirect
+                CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
+                CURLOPT_TIMEOUT        => 120,      // timeout on response
+                CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+                CURLOPT_SSL_VERIFYPEER => false     // Disabled SSL Cert checks
+            );
 
             // $ch      = curl_init( $url );
             // curl_setopt_array( $ch, $options );
@@ -212,23 +212,23 @@ class AccountController extends Controller
                 $info[] = $acc->last_claimed + 60 * 60 * 24 * 14;
                 // echo $info[7];die;
                 // $info[] = $acc->staff_name;
-                // $url = 'https://axie.zone/leaderboard?ron_addr='.$address;
-                // $ch      = curl_init( $url );
-                // curl_setopt_array( $ch, $options );
-                // $content = curl_exec( $ch );
-                // $err     = curl_errno( $ch );
-                // $errmsg  = curl_error( $ch );
-                // $header  = curl_getinfo( $ch );
-                // curl_close( $ch );
+                $url = 'https://axie.zone/leaderboard?ron_addr='.$address;
+                $ch      = curl_init( $url );
+                curl_setopt_array( $ch, $options );
+                $content = curl_exec( $ch );
+                $err     = curl_errno( $ch );
+                $errmsg  = curl_error( $ch );
+                $header  = curl_getinfo( $ch );
+                curl_close( $ch );
 
-                // $dom = new DomDocument();
-                // libxml_use_internal_errors(true);
-                // $dom->loadHTML($content);
-                // libxml_use_internal_errors(false);
-                // $highlighted = $dom->getElementsByTagName('td');
-                // if(isset($highlighted[3]))
-                //     $info[] = $highlighted[3]->textContent;
-                // else
+                $dom = new DomDocument();
+                libxml_use_internal_errors(true);
+                $dom->loadHTML($content);
+                libxml_use_internal_errors(false);
+                $highlighted = $dom->getElementsByTagName('td');
+                if(isset($highlighted[3]))
+                    $info[] = $highlighted[3]->textContent;
+                else
                     $info[] = "";
                 $info[] = $acc->last_claimed + 60 * 60 * 24 * 15;
                 // $info[] = $acc->acc_id;
