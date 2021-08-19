@@ -212,23 +212,23 @@ class AccountController extends Controller
                 $info[] = $acc->last_claimed + 60 * 60 * 24 * 14;
                 // echo $info[7];die;
                 // $info[] = $acc->staff_name;
-                $url = 'https://axie.zone/leaderboard?ron_addr='.$address;
-                $ch      = curl_init( $url );
-                curl_setopt_array( $ch, $options );
-                $content = curl_exec( $ch );
-                $err     = curl_errno( $ch );
-                $errmsg  = curl_error( $ch );
-                $header  = curl_getinfo( $ch );
-                curl_close( $ch );
+                // $url = 'https://axie.zone/leaderboard?ron_addr='.$address;
+                // $ch      = curl_init( $url );
+                // curl_setopt_array( $ch, $options );
+                // $content = curl_exec( $ch );
+                // $err     = curl_errno( $ch );
+                // $errmsg  = curl_error( $ch );
+                // $header  = curl_getinfo( $ch );
+                // curl_close( $ch );
 
-                $dom = new DomDocument();
-                libxml_use_internal_errors(true);
-                $dom->loadHTML($content);
-                libxml_use_internal_errors(false);
-                $highlighted = $dom->getElementsByTagName('td');
-                if(isset($highlighted[3]))
-                    $info[] = $highlighted[3]->textContent;
-                else
+                // $dom = new DomDocument();
+                // libxml_use_internal_errors(true);
+                // $dom->loadHTML($content);
+                // libxml_use_internal_errors(false);
+                // $highlighted = $dom->getElementsByTagName('td');
+                // if(isset($highlighted[3]))
+                //     $info[] = $highlighted[3]->textContent;
+                // else
                     $info[] = "";
                 $info[] = $acc->last_claimed + 60 * 60 * 24 * 15;
                 // $info[] = $acc->acc_id;

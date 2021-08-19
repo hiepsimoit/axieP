@@ -26,7 +26,7 @@ class rewardsController extends Controller
 
         $user_id = Auth::user()->id;
         $staffs = staff::where('investor_id', $user_id)->where('status', 1)->orderBy('id', 'asc')->get();
-        $accounts = account::where('investor_id', $user_id)->where('status', 1)->orderBy('staff_id', 'asc')->get();
+        $accounts = account::where('investor_id', $user_id)->where('status', 1)->orderBy('id', 'asc')->get();
         $rewards = rewards::where('investor_id', $user_id)->where('month', $monthFull)->where('status',1)->get();
 
         // dd($rewards);
