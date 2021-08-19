@@ -44,7 +44,7 @@
                 <td><?php echo $item->name;?></td>
                 <td><?php echo $item->bank_acc;?></td>
                 <td><?php echo $item->bank_name;?></td>
-                <td><?php echo  number_format($item->salary, 0, ',', '.') ;?></td>
+                <td><?php if($item->salary_type == 1) echo  number_format($item->salary, 0, ',', '.').' VND' ; else echo number_format($item->salary, 0, ',', '.').' %';?></td>
                 <td>
                     <?php switch ($item->status){
                         case  1 :$status  = 'Đang hoạt động';break;

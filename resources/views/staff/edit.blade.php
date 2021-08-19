@@ -23,10 +23,19 @@
                 <input type="text" class="form-control" maxlength="255"  name="bank_name"  value="{{ $data->bank_name  }}">
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label> Kiểu trả lương </label>
+                <select class="form-control" id="salary_type" name="salary_type">
+                    <option value="1" @if($data->salary_type == 1) selected @endif>Lương cứng theo VND</option>
+                    <option value="2" @if($data->salary_type == 2) selected @endif>Chia sẻ % SLP</option>
+                </select>
+            </div>
+        </div>
         <div class="row form-group" >
             <div class="col-md-12">
                 <label> Lương </label>
-                <input type="text" class="form-control" maxlength="255"  onkeyup="FormatNumber(this)"  name="salary"  value="{{ number_format($data->salary, 0, ',', '.') }}">
+                <input type="text" class="form-control" maxlength="255"  onkeyup="FormatNumber(this)"  name="salary" id="salary"  value="{{ number_format($data->salary, 0, ',', '.') }}" placeholder="VND">
             </div>
         </div>
 
@@ -39,7 +48,12 @@
 
     </form>
     <script>
-
+        $('#salary_type').change(function(){
+            if($(this).val() == 1)
+                $('#salary').attr('placeholder', 'VND');
+            else
+                $('#salary').attr('placeholder', '%');
+        });
         function FormatNumber(obj) {
             var strvalue;
 

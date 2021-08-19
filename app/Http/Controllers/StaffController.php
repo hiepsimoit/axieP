@@ -62,10 +62,19 @@ class StaffController extends Controller
             ]
         );
 
+        if($request->salary_type == 2 && ($request->salary <= 0 || $request->salary >= 100))
+            $this->validate($request, [
+                'salary_test' => "required",
+            ], [
+                    'salary_test.required' => 'Số % SLP chia sẻ cho người chơi phải lớn 0 và nhỏ hơn 100!',
+                ]
+            );
+
         $newStaff = new staff();
         $newStaff->name = $request->name;
         $newStaff->bank_acc = $request->bank_acc;
         $newStaff->bank_name = $request->bank_name;
+        $newStaff->salary_type = $request->salary_type;
         $newStaff->salary = str_replace('.', '', $request->salary);
         $user = Auth::user();
         $newStaff->investor_id = $user->id;
@@ -74,6 +83,7 @@ class StaffController extends Controller
         $id = $newStaff->id;
         $newSalary = new staff_salary();
         $newSalary->staff_id = $id;
+        $newSalary->salary_type = $request->salary_type;
         $newSalary->salary = str_replace('.', '', $request->salary);
         $newSalary->save();
         return redirect($this->url)->with('message', 'Tạo thành công!');
@@ -110,19 +120,30 @@ class StaffController extends Controller
                 ]
             );
 
+            if($request->salary_type == 2 && ($request->salary <= 0 || $request->salary >= 100))
+                $this->validate($request, [
+                    'salary_test' => "required",
+                ], [
+                        'salary_test.required' => 'Số % SLP chia sẻ cho người chơi phải lớn 0 và nhỏ hơn 100!',
+                    ]
+                );
+
             $newStaff = staff::find($id);
             $oldSalary = $newStaff->salary;
+            $oldSalaryType = $newStaff->salary_type;
             $newStaff->name = $request->name;
             $newStaff->bank_acc = $request->bank_acc;
             $newStaff->bank_name = $request->bank_name;
+            $newStaff->salary_type = $request->salary_type;
             $newStaff->salary = str_replace('.', '', $request->salary);
             $user = Auth::user();
             $newStaff->investor_id = $user->id;
-
             $newStaff->save();
-            if (str_replace('.', '', $request->salary) != $oldSalary) {
+            if (($request->salary_type == $oldSalaryType && str_replace('.', '', $request->salary) != $oldSalary) ||
+                 $request->salary_type != $oldSalaryType) {
                 $newSalary = new staff_salary();
                 $newSalary->staff_id = $id;
+                $newSalary->salary_type = $request->salary_type;
                 $newSalary->salary = str_replace('.', '', $request->salary);
                 $newSalary->save();
             }
@@ -152,7 +173,6 @@ class StaffController extends Controller
             $data->save();
             return redirect($this->url)->with('message', 'Khôi phục thành công!');
         }
-
     }
 
 }

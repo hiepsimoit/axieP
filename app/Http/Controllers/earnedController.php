@@ -290,9 +290,21 @@ class earnedController extends Controller
                     $bal_yesterday->save();
                 }
                 $bal_today->balance = $bal_yesterday->balance;
-                $bal_today->earned = 0;
+                $bal_today->earned = 0;            
+                $bal_today->total_in_month = 0;
+                if(date('d') != 1){
+                    if(isset($bal_yesterday->total_in_month))
+                        $bal_today->total_in_month = $bal_yesterday->total_in_month;
+                    else
+                    {
+                        $earneds = balance_eod::where('acc_id', $acc->id)->where('month_id', date('Ym'))->get();
+                        foreach($earneds as $e){
+                            $bal_today->total_in_month += $e->earned;
+                        }
+                    }
+                }
+                
                 $bal_today->save();
-                // echo 1;die;
             } 
             else{ //ĐÃ tồn tại dữ liệu ngày hôm nay
                 $url = "https://game-api.skymavis.com/game-api/clients/".$address."/items/1";
@@ -343,25 +355,27 @@ class earnedController extends Controller
                     $acc->everage = $everage;
                     $acc->save();
 
-                    // $curBalance = intval($res->total);
                     
                     if($bal_yesterday){
-                        // if($bal_today->acc_id == 7)
-                        //     dd($bal_today);die;
                         $earnTemp = $curBalance - $bal_today->balance;
-                        if($earnTemp >= 0){
-                            $bal_today->earned += $earnTemp;
-                            // $acc->balance = $curBalance;
-                            // $acc->save();
+                        if($earnTemp >= 0 && $earnTemp <1000){
+                            $bal_today->earned += $earnTemp;                            
+                            $bal_today->total_in_month += $earnTemp;
                         }
                         else{
                             // $diff = 
-                            if($curBalance < 200)
-                                $bal_today->earned += $curBalance;
-                        } 
+                            if($curBalance < 200){
+                                $bal_today->earned += $curBalance;                            
+                                $bal_today->total_in_month += $curBalance;
+                            }
+                        }
+                         
                     }
-                    else
+                    else{
                         $bal_today->earned = $curBalance;
+                        $bal_today->total_in_month += $curBalance;
+                    }
+
                     $bal_today->balance = $curBalance;
                     $bal_today->save();
                 }

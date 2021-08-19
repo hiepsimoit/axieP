@@ -23,10 +23,19 @@
                 <input type="text" class="form-control" maxlength="255"  name="bank_name"  value="{{ old('bank_name')  }}">
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label> Kiểu trả lương </label>
+                <select class="form-control" id="salary_type" name="salary_type">
+                    <option value="1">Lương cứng theo VND</option>
+                    <option value="2">Chia sẻ % SLP</option>
+                </select>
+            </div>
+        </div>
         <div class="row form-group">
             <div class="col-md-12">
                 <label> Lương </label>
-                <input type="text" class="form-control" maxlength="255"  onkeyup="FormatNumber(this)"  name="salary"  value="{{ old('salary')  }}">
+                <input type="text" class="form-control" maxlength="255"  onkeyup="FormatNumber(this)" id="salary"  name="salary"  value="{{ old('salary') }}" placeholder="VND">
             </div>
         </div>
 
@@ -40,6 +49,12 @@
     </form>
     <script>
 
+        $('#salary_type').change(function(){
+            if($(this).val() == 1)
+                $('#salary').attr('placeholder', 'VND');
+            else
+                $('#salary').attr('placeholder', '%');
+        });
         function FormatNumber(obj) {
             var strvalue;
 
