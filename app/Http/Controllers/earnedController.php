@@ -307,6 +307,18 @@ class earnedController extends Controller
                 $bal_today->save();
             } 
             else{ //ĐÃ tồn tại dữ liệu ngày hôm nay
+
+                if(!$bal_today->total_in_month){
+                    $earneds = balance_eod::where('acc_id', $acc->id)->where('month_id', date('Ym'))->get();
+                    $total_in_month = 0;
+                    foreach($earneds as $e){
+                        $total_in_month += $e->earned;
+                    }
+                    $bal_today->total_in_month = $total_in_month;
+                    $bal_today->save();
+                }
+                
+
                 $url = "https://game-api.skymavis.com/game-api/clients/".$address."/items/1";
                 $options = array(
                     CURLOPT_RETURNTRANSFER => true,     // return web page
@@ -335,7 +347,7 @@ class earnedController extends Controller
                 // dd($header);
                 $res = json_decode($header['content']);
 
-                if($res){
+                if($res && $res->success == 'true'){
                     $acc_id = $acc->id;
                     $curBalance = intval($res->total);
                     // $totalSLP += $curBalance;
@@ -358,6 +370,12 @@ class earnedController extends Controller
                     
                     if($bal_yesterday){
                         $earnTemp = $curBalance - $bal_today->balance;
+                        
+                        
+
+                        // dd($earneds);
+                        // echo $bal_today->total_in_month;die;
+
                         if($earnTemp >= 0 && $earnTemp <1000){
                             $bal_today->earned += $earnTemp;                            
                             $bal_today->total_in_month += $earnTemp;
@@ -369,7 +387,6 @@ class earnedController extends Controller
                                 $bal_today->total_in_month += $curBalance;
                             }
                         }
-                         
                     }
                     else{
                         $bal_today->earned = $curBalance;
@@ -378,6 +395,8 @@ class earnedController extends Controller
 
                     $bal_today->balance = $curBalance;
                     $bal_today->save();
+                    $earneds = balance_eod::where('acc_id', $acc->id)->where('month_id', date('Ym'))->get();
+                    
                 }
                 else{
                     $isError = 1;

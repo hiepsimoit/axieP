@@ -13,6 +13,12 @@
 		<div class="col-md-2">
 			<button type="submit" class="btn btn-success" id="button_search" name="button_search">Search</button>
 		</div>
+		<div class="col-md-1">
+			Giá SLP:
+		</div>
+		<div class="col-md-1">
+			<input type="text" id="slp_value" name="slp_value" class="form-control" value="">
+		</div>
 	</div>
 	
 </form>
@@ -32,7 +38,7 @@
 		<tr style="">
 			<th >Người chơi</th>
 			<th >Account</th>
-			<th >SLP/ngày</th>
+			<th >Tổng SLP</th>
 			<th >Lương</th>
 			<th >Tổng thưởng</th>
 			<th >Giá trị</th>
@@ -56,12 +62,44 @@
 			</tr>
 			@foreach($accounts as $acc)
 				@if($acc->staff_id == $staff->id)
-				<?php $totalSalary += $staff->salary; ?>
+				
 				<tr style="background-color: #bde9ff;">
 					<td></td>
 					<td>{{$acc->acc_name}}</td>
-					<td>{{$acc->everage}}</td>
-					<td>{{number_format($staff->salary)}}</td>
+					<td>
+						<?php 
+						$totalSLP = 0;
+						foreach($earneds as $earned){
+							if($earned->acc_id == $acc->id){
+								$totalSLP = $earned->total_in_month;
+								echo $earned->total_in_month;
+								break;
+							}
+						} ?>
+					</td>
+					<td>
+						<?php 
+							if($staff->salary_type == 1){
+								$totalSalary += $staff->salary; 
+								echo $staff->salary;
+							}
+							else{
+								$salary = 0;
+								$total_in_month = $earned->total_in_month;
+								if($total_in_month > 6000){
+									$salary = ($total_in_month-6000)*700 + 4500*400 + 1500*500;
+								} else if ($total_in_month > 4500){
+									$salary = ($total_in_month - 4500)*500 + 4500 * 400;
+								} else{
+									$salary = $total_in_month*400;
+								}
+								if($staff->salary_type == 2)
+									$totalSalary += $salary;
+								echo number_format($salary);
+							}
+							
+						 ?>
+					</td>
 					<td id="total_reward_{{$acc->id}}">
 						<?php $reward = 0; ?>
 						@foreach($rewards as $rw)
@@ -185,5 +223,7 @@
         return (((sign)?'':'-') + num);
         // eval(obj).value = (((sign) ? '' : '-') + num);
     }
+
+    // $('#slp_value').change('func')
 </script>
 @endsection

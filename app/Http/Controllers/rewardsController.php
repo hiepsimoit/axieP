@@ -15,10 +15,10 @@ class rewardsController extends Controller
     //
 
     public function get(Request $request){
-        $vip_time = Auth::user()->vip_time;
-        if(date('now') > $vip_time || !Auth::user()->paid){
-            return view('buy_package.add', ['title' => "Mua gói sử dụng" , 'url' => 'buy_package'])->with('message', 'Thật tiếc! Gói VIP của bạn đã hết! Hãy mua thêm nhé!');
-        }
+        // $vip_time = Auth::user()->vip_time;
+        // if(date('now') > $vip_time || !Auth::user()->paid){
+        //     return view('buy_package.add', ['title' => "Mua gói sử dụng" , 'url' => 'buy_package'])->with('message', 'Thật tiếc! Gói VIP của bạn đã hết! Hãy mua thêm nhé!');
+        // }
         if($request->choose_month)
             $monthFull = substr($request->choose_month, 3, 4).substr($request->choose_month, 0, 2);
         else
@@ -28,10 +28,28 @@ class rewardsController extends Controller
         $staffs = staff::where('investor_id', $user_id)->where('status', 1)->orderBy('id', 'asc')->get();
         $accounts = account::where('investor_id', $user_id)->where('status', 1)->orderBy('id', 'asc')->get();
         $rewards = rewards::where('investor_id', $user_id)->where('month', $monthFull)->where('status',1)->get();
-
+        if($monthFull < date('Ym')){
+            $earneds = DB::table('balance_eod')->where('month_id', $monthFull)->where('day', 31)->get();
+            if(count($earneds) == 0)
+                $earneds = DB::table('balance_eod')->where('month_id', $monthFull)->where('day', 30)->get();
+            if(count($earneds) == 0)
+                $earneds = DB::table('balance_eod')->where('month_id', $monthFull)->where('day', 29)->get();
+            if(count($earneds) == 0)
+                $earneds = DB::table('balance_eod')->where('month_id', $monthFull)->where('day', 28)->get();
+        } else{
+            $earneds = DB::table('balance_eod')->where('month_id', $monthFull)->where('day', date('d'))->orderBy('acc_id', 'asc')->get();
+        }
         // dd($rewards);
 
-        return view('rewards',['staffs'=>$staffs, 'accounts'=>$accounts, 'choose_month'=>$request->choose_month, 'rewards'=>$rewards]);
+        foreach($staffs as $staff){
+            if($staff->salary_type == 2){
+                foreach($accounts as $acc){
+                    // if
+                }
+            }
+        }
+
+        return view('rewards',['staffs'=>$staffs, 'accounts'=>$accounts, 'choose_month'=>$request->choose_month, 'rewards'=>$rewards, 'earneds'=>$earneds]);
     }
 
 
